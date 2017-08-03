@@ -3,6 +3,7 @@ package com.oxandon.calendar.view;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -82,27 +83,27 @@ public final class DayView extends LinearLayout implements IDayView {
         switch (status) {
             //正常
             case DayStatus.NORMAL:
-                tv.setTextColor(Color.parseColor("#343434"));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.common_text_color));
                 break;
             //不可用
             case DayStatus.INVALID:
-                tv.setTextColor(Color.parseColor("#CCCCCC"));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.invalid_text_color));
                 break;
             //范围内
             case DayStatus.RANGE:
-                tv.setTextColor(Color.parseColor("#FFFFFF"));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
                 break;
             //左边界
             case DayStatus.BOUND_L:
-                tv.setTextColor(Color.parseColor("#FFFFFF"));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
                 break;
             //右边界
             case DayStatus.BOUND_R:
-                tv.setTextColor(Color.parseColor("#FFFFFF"));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
                 break;
             //强调
             case DayStatus.STRESS:
-                tv.setTextColor(Color.parseColor("#FF6600"));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.stress_text_color));
                 break;
         }
     }
@@ -116,17 +117,17 @@ public final class DayView extends LinearLayout implements IDayView {
         switch (status) {
             //正常
             case DayStatus.NORMAL:
-                setBackgroundColor(Color.parseColor("#FFFFFF"));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
                 setEnabled(true);
                 break;
             //不可用
             case DayStatus.INVALID:
-                setBackgroundColor(Color.parseColor("#FFFFFF"));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
                 setEnabled(false);
                 break;
             //范围内
             case DayStatus.RANGE:
-                setBackgroundColor(Color.parseColor("#ABEAE2"));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.range_bg_color));
                 setEnabled(true);
                 break;
             //左边界
@@ -139,7 +140,7 @@ public final class DayView extends LinearLayout implements IDayView {
                 break;
             //强调
             case DayStatus.STRESS:
-                setBackgroundColor(Color.parseColor("#FFFFFF"));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.range_bg_color));
                 setEnabled(true);
                 break;
         }

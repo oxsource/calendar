@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.oxandon.calendar.R;
 import com.oxandon.calendar.annotation.DayStatus;
 import com.oxandon.calendar.protocol.IDayView;
 import com.oxandon.calendar.protocol.IMonthView;
@@ -56,7 +57,7 @@ public class MonthView extends ViewGroup implements IMonthView {
         LINE_HEIGHT = ViewUtils.dp2px(context, 0.5f);
         for (int j = 0; j < lines.length; j++) {
             View view = new View(getContext());
-            view.setBackgroundColor(Color.parseColor("#ECECEC"));
+            view.setBackgroundResource(R.color.divide_line_color);
             addView(view);
             lines[j] = view;
         }

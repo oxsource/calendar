@@ -1,10 +1,10 @@
 package com.oxandon.calendar.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -85,11 +85,11 @@ public class CalendarView extends LinearLayout {
         };
         StickyDecoration decoration = StickyDecoration.Builder
                 .init(groupListener)
-                .setGroupBackground(Color.parseColor("#FFFFFF"))     //背景色
+                .setGroupBackground(ContextCompat.getColor(getContext(), R.color.common_bg_color))     //背景色
                 .setGroupHeight(ViewUtils.dp2px(getContext(), 40))     //高度
-                .setDivideColor(Color.parseColor("#ECECEC"))           //分割线颜色
+                .setDivideColor(ContextCompat.getColor(getContext(), R.color.divide_line_color))           //分割线颜色
                 .setDivideHeight(ViewUtils.dp2px(getContext(), 0.5f))  //分割线高度 (默认没有分割线)
-                .setGroupTextColor(Color.parseColor("#343434"))                        //字体颜色
+                .setGroupTextColor(ContextCompat.getColor(getContext(), R.color.common_text_color))                        //字体颜色
                 .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD)) //加粗
                 .setGroupTextSize(ViewUtils.sp2px(getContext(), 15))   //字体大小
                 .setTextSideMargin(ViewUtils.dp2px(getContext(), 10))  //边距   靠左时为左边距  靠右时为右边距
