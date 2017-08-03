@@ -35,20 +35,45 @@ public interface ICalendar {
     int isTodayOfMonth(Date date);
 
     /**
-     * 比较
+     * 比较是否相同
      *
      * @param calendarA
      * @param calendarB
      * @param field
      * @return
      */
-    boolean compare(Calendar calendarA, Calendar calendarB, int field);
+    boolean equals(Calendar calendarA, Calendar calendarB, int field);
 
+    /**
+     * 区间内有多少个月
+     *
+     * @param sDate
+     * @param eDate
+     * @return
+     */
     int months(Date sDate, Date eDate);
 
     Date max(Date sDate, Date eDate);
 
     Date min(Date sDate, Date eDate);
 
+    /**
+     * 获取区间内各月的Date
+     *
+     * @param sDate
+     * @param eDate
+     * @return
+     */
     List<Date> fillMonths(Date sDate, Date eDate);
+
+    /**
+     * 目标月份有哪些天在区间内,返回索引值
+     * b不在范围内时返回[-1,-1]
+     *
+     * @param month 目标月份
+     * @param sDay  开始日期
+     * @param eDay  结束日期
+     * @return 一维数组两个元素表示起始位置
+     */
+    int[] containDaysIndex(Date month, Date sDay, Date eDay);
 }

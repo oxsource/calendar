@@ -19,6 +19,17 @@ public interface IDayView extends ICalendarView<Integer> {
         public String desc;
         @DayStatus
         public int descStatus;
+
+        public State() {
+            this(DayStatus.IGNORE, null);
+        }
+
+        public State(@DayStatus int status, String desc) {
+            this.status = status;
+            this.valueStatus = status;
+            this.descStatus = status;
+            this.desc = desc;
+        }
     }
 
     /**

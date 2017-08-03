@@ -126,21 +126,19 @@ public class MonthView extends ViewGroup implements IMonthView {
         for (int index = 0, move = position + 1; index < dayViews.length; index++, move++) {
             boolean rightBound = move % 7 == 0;
             Integer value;
-            IDayView.State state = new IDayView.State();
+            IDayView.State state;
             if (index < offset) {
                 value = Integer.valueOf(index);
                 //set state
                 boolean isToday = index == isTodayOfMonth;
+                state = new IDayView.State();
                 state.status = DayStatus.NORMAL;
                 state.valueStatus = (lastIsRightBound || rightBound) ? DayStatus.STRESS : DayStatus.NORMAL;
                 state.desc = isToday ? STR_TODAY : "";
                 state.descStatus = isToday ? DayStatus.STRESS : DayStatus.NORMAL;
             } else {
                 value = Integer.valueOf(-1);
-                state.status = DayStatus.INVALID;
-                state.valueStatus = DayStatus.INVALID;
-                state.desc = "";
-                state.descStatus = DayStatus.INVALID;
+                state = new IDayView.State(DayStatus.INVALID, "");
             }
             dayViews[index].value(value);
             dayViews[index].change(state);
@@ -182,6 +180,12 @@ public class MonthView extends ViewGroup implements IMonthView {
 
     @Override
     public void valid(Interval interval) {
-
+        int[] range = DateUtils.get().containDaysIndex(value(), interval.left, interval.right);
+        IDayView.State normal = new IDayView.State(DayStatus.NORMAL, null);
+        IDayView.State invalid = new IDayView.State(DayStatus.NORMAL, null);
+        for (int i = 0; i < dayViews.length; i++) {
+            boolean contain = i >= range[0] && i <= range[1];
+            dayViews[i].change(contain ? normal : invalid);
+        }
     }
 }
