@@ -110,6 +110,10 @@ public class DateUtils implements ICalendar {
     @Override
     public int[] containDaysIndex(Date month, Date sDay, Date eDay) {
         int[] range = new int[2];
+        //保证日期顺序
+        sDay = min(sDay, eDay);
+        eDay = max(sDay, eDay);
+        //开始分四种情况计算
         if (null == sDay && null == eDay) {
             //全部正常（前后开放）
             range[0] = 0;
@@ -166,9 +170,26 @@ public class DateUtils implements ICalendar {
                     range[1] = day2 - day1;
                 }
             }
-
         } else {
             //区间内有效（前后闭合）
+            Calendar calendarMonth = calendar(month);
+            Calendar calendarDay1 = calendar(sDay);
+            Calendar calendarDay2 = calendar(eDay);
+            if (calendarMonth.get(Calendar.YEAR) < calendarDay1.get(Calendar.YEAR)
+                    || calendarMonth.get(Calendar.YEAR) > calendarDay2.get(Calendar.YEAR)) {
+                //不在年份范围内
+                range[0] = -1;
+                range[1] = -1;
+            } else if (calendarMonth.get(Calendar.YEAR) > calendarDay1.get(Calendar.YEAR)
+                    && calendarMonth.get(Calendar.YEAR) < calendarDay2.get(Calendar.YEAR)) {
+                //完全在年份范围内
+                range[0] = 0;
+                range[1] = maxDaysOfMonth(month) - 1;
+            } else if (calendarMonth.get(Calendar.YEAR) == calendarDay1.get(Calendar.YEAR)) {
+
+            } else {
+                //calendarMonth.get(Calendar.YEAR) == calendarDay1.get(Calendar.YEAR)
+            }
         }
         return range;
     }
