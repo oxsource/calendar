@@ -11,7 +11,7 @@ import com.oxandon.calendar.annotation.CalendarStatus;
 public interface ICalendarView<T> {
     int MAX_DAYS_OF_MONTH = 31;
     int WEEK_DAYS = 7;
-    int MAX_ROWS = 5;// MAX_DAYS_OF_MONTH / ONE_ROW_DAYS + 1;
+    int MAX_HORIZONTAL_LINES = 7;
 
     /**
      * 设置描述

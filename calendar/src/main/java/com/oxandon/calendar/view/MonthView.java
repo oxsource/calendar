@@ -23,9 +23,8 @@ import java.util.Date;
  */
 
 public class MonthView extends ViewGroup implements IMonthView {
-    private final int HORIZONTAL_LINES = 6;
     private final DayView[] dayViews = new DayView[MAX_DAYS_OF_MONTH];
-    private final View[] lines = new View[HORIZONTAL_LINES];
+    private final View[] lines = new View[MAX_HORIZONTAL_LINES];
     private TextView tvHead;
     //dimens
     private final int HEAD_HEIGHT;
@@ -39,6 +38,8 @@ public class MonthView extends ViewGroup implements IMonthView {
     //child width and height
     private int childWidth = 0;
     private int childHeight = 0;
+    //row count
+    private int dayRows = 0;
 
     public MonthView(Context context) {
         this(context, null);
@@ -80,10 +81,14 @@ public class MonthView extends ViewGroup implements IMonthView {
         int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
         dayViews[0].measure(widthMeasureSpec, heightMeasureSpec);
         int childrenHeight = HEAD_HEIGHT;
-        childrenHeight += dayViews[0].getMeasuredHeight() * MAX_ROWS;
-        childrenHeight += HORIZONTAL_LINES * LINE_HEIGHT;
+        //calc need rows
+        int amount = position + offset;
+        dayRows = (amount / WEEK_DAYS) + (((amount % WEEK_DAYS) != 0) ? 1 : 0);
+        //measure container
+        childrenHeight += dayViews[0].getMeasuredHeight() * dayRows;
+        childrenHeight += (dayRows + 1) * LINE_HEIGHT;
         setMeasuredDimension(totalWidth, childrenHeight);
-        //measure head text view
+        //measure head
         tvHead.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(HEAD_HEIGHT, MeasureSpec.EXACTLY));
         //measure DayViews
         childWidth = totalWidth / WEEK_DAYS;
