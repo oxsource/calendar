@@ -141,7 +141,7 @@ public class MonthView extends ViewGroup implements IMonthView {
                 state = new IDayView.State(DayStatus.INVALID, "");
             }
             dayViews[index].value(value);
-            dayViews[index].change(state);
+//            dayViews[index].change(state);
             dayViews[index].layout(offsetX, offsetY, offsetX + childWidth, childBottom);
             if (rightBound) {
                 offsetX = 0;
@@ -182,9 +182,9 @@ public class MonthView extends ViewGroup implements IMonthView {
     public void valid(Interval interval) {
         int[] range = DateUtils.get().containDaysIndex(value(), interval.left, interval.right);
         IDayView.State normal = new IDayView.State(DayStatus.NORMAL, null);
-        IDayView.State invalid = new IDayView.State(DayStatus.NORMAL, null);
-        for (int i = 0; i < dayViews.length; i++) {
-            boolean contain = i >= range[0] && i <= range[1];
+        IDayView.State invalid = new IDayView.State(DayStatus.INVALID, null);
+        for (int i = 0; i < offset; i++) {
+            boolean contain = (i >= range[0]) && (i <= range[1]);
             dayViews[i].change(contain ? normal : invalid);
         }
     }

@@ -109,86 +109,57 @@ public class DateUtils implements ICalendar {
 
     @Override
     public int[] containDaysIndex(Date month, Date sDay, Date eDay) {
-        int[] range = new int[2];
+        final int[] range = new int[]{-1, -1};
+        if (null == month) {
+            return range;
+        }
+        final int maxDaysOfMonth = maxDaysOfMonth(month);
+        //保证sDay和eDay不为空
+        if (null == sDay || null == eDay) {
+            Calendar safeCalendar = calendar(month);
+            if (null == sDay) {
+                safeCalendar.set(Calendar.DAY_OF_MONTH, 1);
+                sDay = safeCalendar.getTime();
+            }
+            if (null == eDay) {
+                safeCalendar.set(Calendar.DAY_OF_MONTH, maxDaysOfMonth);
+                eDay = safeCalendar.getTime();
+            }
+        }
         //保证日期顺序
         sDay = min(sDay, eDay);
         eDay = max(sDay, eDay);
-        //开始分四种情况计算
-        if (null == sDay && null == eDay) {
-            //全部正常（前后开放）
-            range[0] = 0;
-            range[1] = maxDaysOfMonth(month) - 1;
-        } else if (null == sDay && null != eDay) {
-            //左区间有效（前开后闭）
-            Calendar calendarMonth = calendar(month);
-            Calendar calendarDay = calendar(eDay);
-            if (calendarMonth.get(Calendar.YEAR) > calendarDay.get(Calendar.YEAR)) {
-                //当前月年份是否在目标之后
-                range[0] = -1;
-                range[1] = -1;
-            } else if (calendarMonth.get(Calendar.YEAR) < calendarDay.get(Calendar.YEAR)) {
-                //当前月年份在目标之前
-                range[0] = 0;
-                range[1] = maxDaysOfMonth(month) - 1;
-            } else {
-                //同一年
-                int days = calendarDay.get(Calendar.DAY_OF_YEAR);
-                calendarMonth.set(Calendar.DAY_OF_MONTH, 1);
-                int day1 = calendarMonth.get(Calendar.DAY_OF_YEAR);
-                int day2 = day1 + maxDaysOfMonth(month);
-                if (day1 > days) {
-                    range[0] = -1;
-                    range[1] = -1;
-                } else {
-                    range[0] = 0;
-                    range[1] = days > day2 ? (day2 - day1) : (days - day1);
-                }
+        //以最小年份为基础
+        Calendar[] calendars = new Calendar[]{calendar(month), calendar(sDay), calendar(eDay)};
+        Calendar miniYearCalendar = calendars[0];
+        for (int i = 1; i < calendars.length; i++) {
+            if (miniYearCalendar.get(Calendar.YEAR) > calendars[i].get(Calendar.YEAR)) {
+                miniYearCalendar = calendars[i];
             }
-        } else if (null != sDay && null == eDay) {
-            //右区间有效（前闭后开）
-            Calendar calendarMonth = calendar(month);
-            Calendar calendarDay = calendar(sDay);
-            if (calendarMonth.get(Calendar.YEAR) > calendarDay.get(Calendar.YEAR)) {
-                //当前月年份是否在目标之后
-                range[0] = 0;
-                range[1] = maxDaysOfMonth(month) - 1;
-            } else if (calendarMonth.get(Calendar.YEAR) < calendarDay.get(Calendar.YEAR)) {
-                //当前月年份在目标之前
-                range[0] = -1;
-                range[1] = -1;
-            } else {
-                //同一年
-                int days = calendarDay.get(Calendar.DAY_OF_YEAR);
-                calendarMonth.set(Calendar.DAY_OF_MONTH, 1);
-                int day1 = calendarMonth.get(Calendar.DAY_OF_YEAR);
-                int day2 = day1 + maxDaysOfMonth(month);
-                if (day2 < days) {
-                    range[0] = -1;
-                    range[1] = -1;
-                } else {
-                    range[0] = days <= day1 ? 0 : (days - day1);
-                    range[1] = day2 - day1;
-                }
+        }
+        final long miniDate = miniYearCalendar.getTime().getTime();
+        long[] diffDays = new long[calendars.length];
+        for (int i = 0; i < calendars.length; i++) {
+            Calendar cal = calendar(new Date(miniDate));
+            int diffYear = calendars[i].get(Calendar.YEAR) - cal.get(Calendar.YEAR);
+            for (int j = 0; j < diffYear; j++) {
+                diffDays[i] += cal.getActualMaximum(Calendar.DAY_OF_YEAR);
+                cal.add(Calendar.YEAR, 1);
             }
-        } else {
-            //区间内有效（前后闭合）
-            Calendar calendarMonth = calendar(month);
-            Calendar calendarDay1 = calendar(sDay);
-            Calendar calendarDay2 = calendar(eDay);
-            if (calendarMonth.get(Calendar.YEAR) < calendarDay1.get(Calendar.YEAR)
-                    || calendarMonth.get(Calendar.YEAR) > calendarDay2.get(Calendar.YEAR)) {
-                //不在年份范围内
-                range[0] = -1;
-                range[1] = -1;
-            } else if (calendarMonth.get(Calendar.YEAR) > calendarDay1.get(Calendar.YEAR)
-                    && calendarMonth.get(Calendar.YEAR) < calendarDay2.get(Calendar.YEAR)) {
-                //完全在年份范围内
-                range[0] = 0;
-                range[1] = maxDaysOfMonth(month) - 1;
-            } else if (calendarMonth.get(Calendar.YEAR) == calendarDay1.get(Calendar.YEAR)) {
+        }
+        calendars[0].set(Calendar.DAY_OF_MONTH, 1);
+        long dayIndex = diffDays[0] + calendars[0].get(Calendar.DAY_OF_YEAR);
+        long limitA = diffDays[1] + calendars[1].get(Calendar.DAY_OF_YEAR);
+        long limitB = diffDays[2] + calendars[2].get(Calendar.DAY_OF_YEAR);
 
-            } else {
-                //calendarMonth.get(Calendar.YEAR) == calendarDay1.get(Calendar.YEAR)
+        long temp;
+        for (int i = 0; i < maxDaysOfMonth; i++) {
+            temp = dayIndex + i;
+            boolean contain = (temp >= limitA) && (temp <= limitB);
+            if (range[0] < 0 && contain) {
+                range[0] = i;
+            } else if (range[0] >= 0 && contain) {
+                range[1] = i;
             }
         }
         return range;

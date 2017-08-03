@@ -123,6 +123,7 @@ public final class DayView extends LinearLayout implements IDayView {
             //不可用
             case DayStatus.INVALID:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
+                setTextStatusColor(tvDay, status);
                 setEnabled(false);
                 break;
             //范围内

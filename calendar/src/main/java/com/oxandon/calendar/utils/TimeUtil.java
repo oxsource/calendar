@@ -36,7 +36,7 @@ public class TimeUtil {
         ensureDateFormatMap(format);
         if (dateMap.containsKey(format)) {
             SimpleDateFormat sdf = dateMap.get(format);
-            sdf.parse(dateText);
+            return sdf.parse(dateText);
         }
         return null;
     }

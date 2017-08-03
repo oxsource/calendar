@@ -53,7 +53,7 @@ public class CalendarView extends LinearLayout {
         //月份列表
         RecyclerView bodyView = (RecyclerView) findViewById(R.id.bodyView);
         bodyView.setLayoutManager(new LinearLayoutManager(context));
-        bodyView.setAdapter(calendarAdapter);
+        bodyView.setAdapter(getAdapter());
         initDecoration(bodyView);
     }
 
@@ -79,7 +79,7 @@ public class CalendarView extends LinearLayout {
         GroupListener groupListener = new GroupListener() {
             @Override
             public String getGroupName(int position) {
-                Date date = calendarAdapter.value(position);
+                Date date = getAdapter().value(position);
                 return TimeUtil.dateText(date.getTime(), TimeUtil.YY_M_CN);
             }
         };
@@ -100,7 +100,7 @@ public class CalendarView extends LinearLayout {
 
     public void show(Date sDate, Date eDate) {
         List<Date> dates = DateUtils.get().fillMonths(sDate, eDate);
-        calendarAdapter.update(dates);
+        getAdapter().update(dates);
     }
 
     public void show(String sTime, String eTime, String format) {
@@ -113,5 +113,9 @@ public class CalendarView extends LinearLayout {
             e.printStackTrace();
         }
         show(dates[0], dates[1]);
+    }
+
+    public CalendarAdapter getAdapter() {
+        return calendarAdapter;
     }
 }
