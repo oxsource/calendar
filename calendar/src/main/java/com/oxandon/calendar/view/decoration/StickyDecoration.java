@@ -1,8 +1,9 @@
-package com.oxandon.calendar.view;
+package com.oxandon.calendar.view.decoration;
 
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextPaint;
@@ -166,6 +167,11 @@ public class StickyDecoration extends BaseDecoration {
         public Builder setGroupTextColor(@ColorInt int color) {
             mDecoration.mGroupTextColor = color;
             mDecoration.mTextPaint.setColor(mDecoration.mGroupTextColor);
+            return this;
+        }
+
+        public Builder setTypeface(Typeface typeface) {
+            mDecoration.mTextPaint.setTypeface(typeface);
             return this;
         }
 

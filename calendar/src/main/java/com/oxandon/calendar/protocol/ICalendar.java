@@ -2,6 +2,7 @@ package com.oxandon.calendar.protocol;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 日历计算工具接口
@@ -42,4 +43,12 @@ public interface ICalendar {
      * @return
      */
     boolean compare(Calendar calendarA, Calendar calendarB, int field);
+
+    int months(Date sDate, Date eDate);
+
+    Date max(Date sDate, Date eDate);
+
+    Date min(Date sDate, Date eDate);
+
+    List<Date> fillMonths(Date sDate, Date eDate);
 }

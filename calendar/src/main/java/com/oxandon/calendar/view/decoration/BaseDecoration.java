@@ -1,4 +1,4 @@
-package com.oxandon.calendar.view;
+package com.oxandon.calendar.view.decoration;
 
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -59,9 +59,4 @@ public abstract class BaseDecoration extends RecyclerView.ItemDecoration {
     }
 
     abstract String getGroupName(int position);
-
-
-    void log(String msg) {
-        Log.i("TAG", msg);
-    }
 }

@@ -1,4 +1,4 @@
-package com.oxandon.calendar.view;
+package com.oxandon.calendar.view.decoration;
 
 /**
  * Group监听器，用于获取Group的标题

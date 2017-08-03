@@ -1,4 +1,4 @@
-package com.oxandon.calendar.view;
+package com.oxandon.calendar.utils;
 
 import android.content.Context;
 import android.util.DisplayMetrics;

@@ -18,6 +18,6 @@ public class MultiMonthActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_multi_month);
         calendarView = (CalendarView) findViewById(R.id.calendarView);
-        calendarView.func();
+        calendarView.show("2016-08-01", "2019-08-01", "yyyy-MM-dd");
     }
 }

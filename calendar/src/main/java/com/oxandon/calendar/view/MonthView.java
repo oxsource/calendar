@@ -2,18 +2,16 @@ package com.oxandon.calendar.view;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.oxandon.calendar.annotation.CalendarStatus;
-import com.oxandon.calendar.date.DateUtils;
 import com.oxandon.calendar.protocol.ICalendar;
 import com.oxandon.calendar.protocol.IMonthView;
+import com.oxandon.calendar.utils.DateUtils;
+import com.oxandon.calendar.utils.ViewUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,9 +24,6 @@ import java.util.Date;
 public class MonthView extends ViewGroup implements IMonthView {
     private final DayView[] dayViews = new DayView[MAX_DAYS_OF_MONTH];
     private final View[] lines = new View[MAX_HORIZONTAL_LINES];
-    private TextView tvHead;
-    //dimens
-    private final int HEAD_HEIGHT;
     private final int LINE_HEIGHT;
 
     private Date value;
@@ -53,22 +48,13 @@ public class MonthView extends ViewGroup implements IMonthView {
     public MonthView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setBackgroundColor(Color.WHITE);
-        HEAD_HEIGHT = ViewUtils.dp2px(context, 30);
-        LINE_HEIGHT = ViewUtils.dp2px(context, 0.5f);
-        //head text view
-        TextView head = new TextView(getContext());
-        head.setBackgroundColor(Color.parseColor("#90CFCFCF"));
-        head.setGravity(Gravity.CENTER);
-        head.setTextSize(15);
-        head.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
-        addView(head);
-        tvHead = head;
         //DayView
         for (int i = 0; i < dayViews.length; i++) {
             dayViews[i] = new DayView(context);
             addView(dayViews[i]);
         }
         //horizontal line
+        LINE_HEIGHT = ViewUtils.dp2px(context, 0.5f);
         for (int j = 0; j < lines.length; j++) {
             View view = new View(getContext());
             view.setBackgroundColor(Color.argb(100, 50, 50, 50));
@@ -82,7 +68,7 @@ public class MonthView extends ViewGroup implements IMonthView {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
         dayViews[0].measure(widthMeasureSpec, heightMeasureSpec);
-        int childrenHeight = HEAD_HEIGHT;
+        int childrenHeight = 0;
         //calc need rows
         int amount = position + offset;
         dayRows = (amount / WEEK_DAYS) + (((amount % WEEK_DAYS) != 0) ? 1 : 0);
@@ -90,8 +76,6 @@ public class MonthView extends ViewGroup implements IMonthView {
         childrenHeight += dayViews[0].getMeasuredHeight() * dayRows;
         childrenHeight += (dayRows + 1) * LINE_HEIGHT;
         setMeasuredDimension(totalWidth, childrenHeight);
-        //measure head
-        tvHead.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(HEAD_HEIGHT, MeasureSpec.EXACTLY));
         //measure DayViews
         childWidth = totalWidth / WEEK_DAYS;
         childHeight = dayViews[0].getMeasuredHeight();
@@ -133,9 +117,6 @@ public class MonthView extends ViewGroup implements IMonthView {
     @Override
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
         int offsetX = 0, offsetY = 0;
-        tvHead.layout(0, offsetY, getMeasuredWidth(), offsetY + tvHead.getMeasuredHeight());
-        offsetY += tvHead.getMeasuredHeight();
-
         SplitLinesLayoutControl lineControl = new SplitLinesLayoutControl(lines);
         for (int i = 0; i < position; i++) {
             offsetX += childWidth;
@@ -170,7 +151,7 @@ public class MonthView extends ViewGroup implements IMonthView {
 
     @Override
     public void desc(String desc, int status) {
-        tvHead.setText(desc);
+
     }
 
     @Override

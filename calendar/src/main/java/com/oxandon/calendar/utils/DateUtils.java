@@ -1,9 +1,11 @@
-package com.oxandon.calendar.date;
+package com.oxandon.calendar.utils;
 
 import com.oxandon.calendar.protocol.ICalendar;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -66,5 +68,42 @@ public class DateUtils implements ICalendar {
             same = false;
         }
         return same;
+    }
+
+    @Override
+    public int months(Date sDate, Date eDate) {
+        Calendar before = calendar(min(sDate, eDate));
+        Calendar after = calendar(max(sDate, eDate));
+        int diffYear = after.get(Calendar.YEAR) - before.get(Calendar.YEAR);
+        int diffMonth = after.get(Calendar.MONTH) - before.get(Calendar.MONTH);
+        return diffYear * 12 + diffMonth;
+    }
+
+    @Override
+    public Date max(Date sDate, Date eDate) {
+        return sDate.getTime() > eDate.getTime() ? sDate : eDate;
+    }
+
+    @Override
+    public Date min(Date sDate, Date eDate) {
+        return sDate.getTime() > eDate.getTime() ? eDate : sDate;
+    }
+
+    @Override
+    public List<Date> fillMonths(Date sDate, Date eDate) {
+        List<Date> dates = new ArrayList<>();
+        if (null == sDate || null == eDate) {
+            dates.add(new Date());
+        } else {
+            int months = months(sDate, eDate);
+            Calendar calendar = calendar(min(sDate, eDate));
+            for (int i = 0; i <= months; i++) {
+                dates.add(calendar.getTime());
+                int month = calendar.get(Calendar.MONTH);
+                month += 1;
+                calendar.set(Calendar.MONTH, month);
+            }
+        }
+        return dates;
     }
 }

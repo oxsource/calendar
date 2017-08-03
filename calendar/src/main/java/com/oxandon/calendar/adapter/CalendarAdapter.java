@@ -51,7 +51,10 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         return dates.size();
     }
 
-    public List<Date> getDates() {
-        return dates;
+    public Date value(int position) {
+        if (position >= 0 && position < dates.size()) {
+            return dates.get(position);
+        }
+        return new Date(0);
     }
 }
