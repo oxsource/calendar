@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
+ * 月份控件
  * Created by peng on 2017/8/2.
  */
 
@@ -51,6 +52,7 @@ public class MonthView extends ViewGroup implements IMonthView {
 
     public MonthView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setBackgroundColor(Color.WHITE);
         HEAD_HEIGHT = ViewUtils.dp2px(context, 30);
         LINE_HEIGHT = ViewUtils.dp2px(context, 0.5f);
         //head text view

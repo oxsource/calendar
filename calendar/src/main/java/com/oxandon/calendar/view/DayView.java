@@ -12,6 +12,7 @@ import com.oxandon.calendar.annotation.CalendarStatus;
 import com.oxandon.calendar.protocol.IDayView;
 
 /**
+ * 日期控件
  * Created by peng on 2017/8/2.
  */
 
@@ -44,6 +45,7 @@ public final class DayView extends LinearLayout implements IDayView {
     private void initialize(Context context) {
         setOrientation(VERTICAL);
         inflate(context, R.layout.layout_day_view, this);
+        setBackgroundColor(Color.WHITE);
         tvDesc = (TextView) findViewById(R.id.tvDesc);
         tvDay = (TextView) findViewById(R.id.tvDay);
     }
