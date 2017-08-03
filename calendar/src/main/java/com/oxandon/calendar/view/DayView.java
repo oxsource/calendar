@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oxandon.calendar.R;
-import com.oxandon.calendar.annotation.CalendarStatus;
+import com.oxandon.calendar.annotation.DayStatus;
 import com.oxandon.calendar.protocol.IDayView;
 
 /**
@@ -20,7 +20,6 @@ public final class DayView extends LinearLayout implements IDayView {
     private TextView tvDesc;
     private TextView tvDay;
     private Integer value = Integer.valueOf(0);
-    public final static String TODAY = "今天";
 
     public DayView(Context context) {
         super(context);
@@ -51,21 +50,26 @@ public final class DayView extends LinearLayout implements IDayView {
     }
 
     @Override
-    public void desc(String desc, @CalendarStatus int status) {
-        tvDesc.setText(desc);
-        setTextStatusColor(tvDesc, status);
+    public void value(Integer index) {
+        value = index;
+        String content = index < 0 || index > MAX_DAYS_OF_MONTH ? "" : String.valueOf(index + 1);
+        tvDay.setText(content);
     }
 
     @Override
-    public void value(Integer index, @CalendarStatus int status) {
-        value = index;
-        if (index < 0 || index > MAX_DAYS_OF_MONTH) {
-            tvDay.setText("");
-            desc("", CalendarStatus.NORMAL);
-            return;
-        }
-        tvDay.setText(String.valueOf(index + 1));
-        setTextStatusColor(tvDay, status);
+    public Integer value() {
+        return value;
+    }
+
+    @Override
+    public void change(State state) {
+        //背景
+        setBackgroundStatus(state.status);
+        //内容
+        setTextStatusColor(tvDay, state.valueStatus);
+        //描述
+        tvDesc.setText(state.desc);
+        setTextStatusColor(tvDesc, state.descStatus);
     }
 
     /**
@@ -74,16 +78,65 @@ public final class DayView extends LinearLayout implements IDayView {
      * @param tv
      * @param status
      */
-    private void setTextStatusColor(TextView tv, @CalendarStatus int status) {
-        if (status == CalendarStatus.NORMAL) {
-            tv.setTextColor(Color.parseColor("#404040"));
-        } else if (status == CalendarStatus.STRESS) {
-            tv.setTextColor(Color.parseColor("#FF6600"));
+    private void setTextStatusColor(TextView tv, @DayStatus int status) {
+        switch (status) {
+            //正常
+            case DayStatus.NORMAL:
+                //todo
+                tv.setTextColor(Color.parseColor("#404040"));
+                break;
+            //不可用
+            case DayStatus.INVALID:
+                //todo
+                break;
+            //范围内
+            case DayStatus.RANGE:
+                //todo
+                break;
+            //边界
+            case DayStatus.BOUND:
+                //todo
+                break;
+            //强调
+            case DayStatus.STRESS:
+                //todo
+                tv.setTextColor(Color.parseColor("#FF6600"));
+                break;
         }
     }
 
-    @Override
-    public Integer value() {
-        return value;
+    /**
+     * 设置背景状态
+     *
+     * @param status
+     */
+    private void setBackgroundStatus(@DayStatus int status) {
+        switch (status) {
+            //正常
+            case DayStatus.NORMAL:
+                //todo
+                setEnabled(true);
+                break;
+            //不可用
+            case DayStatus.INVALID:
+                //todo
+                setEnabled(false);
+                break;
+            //范围内
+            case DayStatus.RANGE:
+                //todo
+                setEnabled(true);
+                break;
+            //边界
+            case DayStatus.BOUND:
+                //todo
+                setEnabled(true);
+                break;
+            //强调
+            case DayStatus.STRESS:
+                //todo
+                setEnabled(true);
+                break;
+        }
     }
 }

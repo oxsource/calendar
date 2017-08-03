@@ -3,7 +3,6 @@ package com.oxandon.calendar.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.oxandon.calendar.annotation.CalendarStatus;
 import com.oxandon.calendar.view.MonthView;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     @Override
     public void onBindViewHolder(CalendarViewHolder holder, int position) {
         Date date = dates.get(position);
-        holder.view().value(date, CalendarStatus.NORMAL);
+        holder.view().value(date);
     }
 
     @Override

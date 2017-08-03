@@ -5,11 +5,11 @@ import android.support.annotation.IntDef;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-import static com.oxandon.calendar.annotation.CalendarStatus.BOUND;
-import static com.oxandon.calendar.annotation.CalendarStatus.INVALID;
-import static com.oxandon.calendar.annotation.CalendarStatus.NORMAL;
-import static com.oxandon.calendar.annotation.CalendarStatus.RANGE;
-import static com.oxandon.calendar.annotation.CalendarStatus.STRESS;
+import static com.oxandon.calendar.annotation.DayStatus.BOUND;
+import static com.oxandon.calendar.annotation.DayStatus.INVALID;
+import static com.oxandon.calendar.annotation.DayStatus.NORMAL;
+import static com.oxandon.calendar.annotation.DayStatus.RANGE;
+import static com.oxandon.calendar.annotation.DayStatus.STRESS;
 
 /**
  * Created by peng on 2017/8/2.
@@ -17,7 +17,7 @@ import static com.oxandon.calendar.annotation.CalendarStatus.STRESS;
 
 @IntDef(value = {NORMAL, INVALID, RANGE, BOUND, STRESS})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CalendarStatus {
+public @interface DayStatus {
     //正常
     int NORMAL = 0;
     //不可用

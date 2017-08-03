@@ -7,13 +7,12 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.oxandon.calendar.annotation.CalendarStatus;
-import com.oxandon.calendar.protocol.ICalendar;
+import com.oxandon.calendar.annotation.DayStatus;
+import com.oxandon.calendar.protocol.IDayView;
 import com.oxandon.calendar.protocol.IMonthView;
 import com.oxandon.calendar.utils.DateUtils;
 import com.oxandon.calendar.utils.ViewUtils;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -61,7 +60,7 @@ public class MonthView extends ViewGroup implements IMonthView {
             addView(view);
             lines[j] = view;
         }
-        value(new Date(), CalendarStatus.NORMAL);
+        value(new Date());
     }
 
     @Override
@@ -125,14 +124,25 @@ public class MonthView extends ViewGroup implements IMonthView {
         boolean lastIsRightBound = false;//上一个是否是右边界
         for (int index = 0, move = position + 1; index < dayViews.length; index++, move++) {
             boolean rightBound = move % 7 == 0;
+            Integer value;
+            IDayView.State state = new IDayView.State();
             if (index < offset) {
-                int status = (lastIsRightBound || rightBound) ? CalendarStatus.STRESS : CalendarStatus.NORMAL;
-                dayViews[index].value(Integer.valueOf(index), status);
+                value = Integer.valueOf(index);
+                //set state
                 boolean isToday = index == isTodayOfMonth;
-                dayViews[index].desc(isToday ? DayView.TODAY : "", isToday ? CalendarStatus.STRESS : CalendarStatus.NORMAL);
+                state.status = DayStatus.NORMAL;
+                state.valueStatus = (lastIsRightBound || rightBound) ? DayStatus.STRESS : DayStatus.NORMAL;
+                state.desc = isToday ? STR_TODAY : "";
+                state.descStatus = isToday ? DayStatus.STRESS : DayStatus.NORMAL;
             } else {
-                dayViews[index].value(Integer.valueOf(-1), CalendarStatus.NORMAL);
+                value = Integer.valueOf(-1);
+                state.status = DayStatus.INVALID;
+                state.valueStatus = DayStatus.INVALID;
+                state.desc = "";
+                state.descStatus = DayStatus.INVALID;
             }
+            dayViews[index].value(value);
+            dayViews[index].change(state);
             dayViews[index].layout(offsetX, offsetY, offsetX + childWidth, childBottom);
             if (rightBound) {
                 offsetX = 0;
@@ -149,17 +159,10 @@ public class MonthView extends ViewGroup implements IMonthView {
     }
 
     @Override
-    public void desc(String desc, int status) {
-
-    }
-
-    @Override
-    public void value(@NonNull Date date, int status) {
-        position = calendar().firstDayOfMonthIndex(date);
-        offset = calendar().maxDaysOfMonth(date);
-        isTodayOfMonth = calendar().isTodayOfMonth(date);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        desc(sdf.format(date), CalendarStatus.NORMAL);
+    public void value(@NonNull Date date) {
+        position = DateUtils.get().firstDayOfMonthIndex(date);
+        offset = DateUtils.get().maxDaysOfMonth(date);
+        isTodayOfMonth = DateUtils.get().isTodayOfMonth(date);
         if (null != value()) {
             requestLayout();
         }
@@ -169,9 +172,5 @@ public class MonthView extends ViewGroup implements IMonthView {
     @Override
     public Date value() {
         return value;
-    }
-
-    private ICalendar calendar() {
-        return DateUtils.get();
     }
 }

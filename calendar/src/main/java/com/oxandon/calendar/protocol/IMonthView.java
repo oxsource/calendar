@@ -1,5 +1,7 @@
 package com.oxandon.calendar.protocol;
 
+import com.oxandon.calendar.annotation.DayStatus;
+
 import java.util.Date;
 
 /**
@@ -7,5 +9,10 @@ import java.util.Date;
  */
 
 public interface IMonthView extends ICalendarView<Date> {
-
+    class State {
+        public Date a;
+        public Date b;
+        @DayStatus
+        public int status;
+    }
 }
