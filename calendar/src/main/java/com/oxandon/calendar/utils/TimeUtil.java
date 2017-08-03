@@ -13,6 +13,7 @@ import java.util.Map;
  */
 public class TimeUtil {
     public final static String YY_M = "yyyy-MM";
+    public final static String YY_M_CN = "yyyy年MM月";
     public final static String YY_MD = "yyyy-MM-dd";
     public final static String YY_MD_HM = "yyyy-MM-dd HH:mm";
     public final static String YY_MD_HMS = "yyyy-MM-dd HH:mm:ss";

@@ -56,7 +56,7 @@ public class MonthView extends ViewGroup implements IMonthView {
         LINE_HEIGHT = ViewUtils.dp2px(context, 0.5f);
         for (int j = 0; j < lines.length; j++) {
             View view = new View(getContext());
-            view.setBackgroundColor(Color.argb(100, 50, 50, 50));
+            view.setBackgroundColor(Color.parseColor("#ECECEC"));
             addView(view);
             lines[j] = view;
         }

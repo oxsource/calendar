@@ -82,28 +82,26 @@ public final class DayView extends LinearLayout implements IDayView {
         switch (status) {
             //正常
             case DayStatus.NORMAL:
-                //todo
-                tv.setTextColor(Color.parseColor("#404040"));
+                tv.setTextColor(Color.parseColor("#343434"));
                 break;
             //不可用
             case DayStatus.INVALID:
-                //todo
+                tv.setTextColor(Color.parseColor("#CCCCCC"));
                 break;
             //范围内
             case DayStatus.RANGE:
-                //todo
+                tv.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
             //左边界
             case DayStatus.BOUND_L:
-                //todo
+                tv.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
             //右边界
             case DayStatus.BOUND_R:
-                //todo
+                tv.setTextColor(Color.parseColor("#FFFFFF"));
                 break;
             //强调
             case DayStatus.STRESS:
-                //todo
                 tv.setTextColor(Color.parseColor("#FF6600"));
                 break;
         }
@@ -118,30 +116,30 @@ public final class DayView extends LinearLayout implements IDayView {
         switch (status) {
             //正常
             case DayStatus.NORMAL:
-                //todo
+                setBackgroundColor(Color.parseColor("#FFFFFF"));
                 setEnabled(true);
                 break;
             //不可用
             case DayStatus.INVALID:
-                //todo
+                setBackgroundColor(Color.parseColor("#FFFFFF"));
                 setEnabled(false);
                 break;
             //范围内
             case DayStatus.RANGE:
-                //todo
+                setBackgroundColor(Color.parseColor("#ABEAE2"));
                 setEnabled(true);
                 break;
             //左边界
             case DayStatus.BOUND_L:
-                //todo
+                setBackgroundResource(R.drawable.range_lbg);
                 break;
             //右边界
             case DayStatus.BOUND_R:
-                //todo
+                setBackgroundResource(R.drawable.range_rbg);
                 break;
             //强调
             case DayStatus.STRESS:
-                //todo
+                setBackgroundColor(Color.parseColor("#FFFFFF"));
                 setEnabled(true);
                 break;
         }
