@@ -173,4 +173,14 @@ public class MonthView extends ViewGroup implements IMonthView {
     public Date value() {
         return value;
     }
+
+    @Override
+    public void select(Interval interval) {
+
+    }
+
+    @Override
+    public void valid(Interval interval) {
+
+    }
 }

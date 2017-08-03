@@ -8,11 +8,6 @@ import android.support.annotation.NonNull;
 
 public interface ICalendarView<T> {
     int MAX_DAYS_OF_MONTH = 31;
-    int WEEK_DAYS = 7;
-    int MAX_HORIZONTAL_LINES = 6;
-
-    String STR_TODAY = "今天";
-
 
     /**
      * 设置值

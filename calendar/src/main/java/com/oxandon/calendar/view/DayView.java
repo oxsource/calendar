@@ -93,8 +93,12 @@ public final class DayView extends LinearLayout implements IDayView {
             case DayStatus.RANGE:
                 //todo
                 break;
-            //边界
-            case DayStatus.BOUND:
+            //左边界
+            case DayStatus.BOUND_L:
+                //todo
+                break;
+            //右边界
+            case DayStatus.BOUND_R:
                 //todo
                 break;
             //强调
@@ -127,10 +131,13 @@ public final class DayView extends LinearLayout implements IDayView {
                 //todo
                 setEnabled(true);
                 break;
-            //边界
-            case DayStatus.BOUND:
+            //左边界
+            case DayStatus.BOUND_L:
                 //todo
-                setEnabled(true);
+                break;
+            //右边界
+            case DayStatus.BOUND_R:
+                //todo
                 break;
             //强调
             case DayStatus.STRESS:
