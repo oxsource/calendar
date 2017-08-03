@@ -113,11 +113,12 @@ public class MonthView extends ViewGroup implements IMonthView {
         }
 
         public int layout(int offsetY) {
-            if (count > view.length) {
+            if (count >= view.length) {
                 return offsetY;
             }
             int bottom = offsetY + height;
-            view[count++].layout(0, offsetY, width, bottom);
+            view[count].layout(0, offsetY, width, bottom);
+            count += 1;
             return bottom;
         }
     }
