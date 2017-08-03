@@ -1,6 +1,8 @@
 package com.oxandon.calendar.view;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -50,6 +52,29 @@ public class CalendarView extends LinearLayout {
         RecyclerView bodyView = (RecyclerView) findViewById(R.id.bodyView);
         bodyView.setLayoutManager(new LinearLayoutManager(context));
         bodyView.setAdapter(calendarAdapter);
+        initDecoration(bodyView);
+    }
+
+    public void initDecoration(RecyclerView bodyView) {
+        GroupListener groupListener = new GroupListener() {
+            @Override
+            public String getGroupName(int position) {
+                Date date = calendarAdapter.getDates().get(position);
+                return TimeUtil.dateText(date.getTime(), TimeUtil.YY_M);
+            }
+        };
+        StickyDecoration decoration = StickyDecoration.Builder
+                .init(groupListener)
+                .setGroupBackground(Color.parseColor("#48BDFF"))       //背景色
+                .setGroupHeight(ViewUtils.dp2px(getContext(), 35))     //高度
+                .setDivideColor(Color.parseColor("#CCCCCC"))           //分割线颜色
+                .setDivideHeight(ViewUtils.dp2px(getContext(), 1))     //分割线高度 (默认没有分割线)
+                .setGroupTextColor(Color.WHITE)                        //字体颜色
+                .setGroupTextSize(ViewUtils.sp2px(getContext(), 15))   //字体大小
+                .setTextSideMargin(ViewUtils.dp2px(getContext(), 10))  //边距   靠左时为左边距  靠右时为右边距
+                .setTextAlign(Paint.Align.CENTER)                      //居中显示
+                .build();
+        bodyView.addItemDecoration(decoration);
     }
 
     public void func() {
@@ -64,6 +89,11 @@ public class CalendarView extends LinearLayout {
             calendar.set(Calendar.MONTH, month);
         }
         calendarAdapter.update(dates);
+
+    }
+
+    public List<Date> getData() {
+        return calendarAdapter.getDates();
     }
 
     private ListAdapter buildWeekAdapter(Context context) {
