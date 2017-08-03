@@ -85,10 +85,10 @@ public class CalendarView extends LinearLayout {
         };
         StickyDecoration decoration = StickyDecoration.Builder
                 .init(groupListener)
-                .setGroupBackground(Color.parseColor("#90CFCFCF"))     //背景色
+                .setGroupBackground(Color.parseColor("#deCFCFCF"))     //背景色
                 .setGroupHeight(ViewUtils.dp2px(getContext(), 35))     //高度
-                .setDivideColor(Color.parseColor("#CCCCCC"))           //分割线颜色
-                .setDivideHeight(ViewUtils.dp2px(getContext(), 1))     //分割线高度 (默认没有分割线)
+                .setDivideColor(Color.argb(100, 50, 50, 50))           //分割线颜色
+                .setDivideHeight(ViewUtils.dp2px(getContext(), 0.5f))  //分割线高度 (默认没有分割线)
                 .setGroupTextColor(Color.BLACK)                        //字体颜色
                 .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD)) //加粗
                 .setGroupTextSize(ViewUtils.sp2px(getContext(), 15))   //字体大小

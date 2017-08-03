@@ -81,6 +81,7 @@ public class StickyDecoration extends BaseDecoration {
                 }
                 //根据top绘制group背景
                 c.drawRect(left, bottom - mGroupHeight, right, bottom, mGroutPaint);
+                c.drawRect(left, bottom, right, bottom + mDivideHeight, mDividePaint);
                 Paint.FontMetrics fm = mTextPaint.getFontMetrics();
                 //文字竖直居中显示
                 float baseLine = bottom - (mGroupHeight - (fm.bottom - fm.top)) / 2 - fm.bottom;

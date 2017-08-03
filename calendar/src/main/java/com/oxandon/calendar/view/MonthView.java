@@ -74,7 +74,7 @@ public class MonthView extends ViewGroup implements IMonthView {
         dayRows = (amount / WEEK_DAYS) + (((amount % WEEK_DAYS) != 0) ? 1 : 0);
         //measure container
         childrenHeight += dayViews[0].getMeasuredHeight() * dayRows;
-        childrenHeight += (dayRows + 1) * LINE_HEIGHT;
+        childrenHeight += (dayRows) * LINE_HEIGHT;
         setMeasuredDimension(totalWidth, childrenHeight);
         //measure DayViews
         childWidth = totalWidth / WEEK_DAYS;
@@ -121,7 +121,6 @@ public class MonthView extends ViewGroup implements IMonthView {
         for (int i = 0; i < position; i++) {
             offsetX += childWidth;
         }
-        offsetY = lineControl.layout(offsetY);
         int childBottom = offsetY + childHeight;
         boolean lastIsRightBound = false;//上一个是否是右边界
         for (int index = 0, move = position + 1; index < dayViews.length; index++, move++) {
