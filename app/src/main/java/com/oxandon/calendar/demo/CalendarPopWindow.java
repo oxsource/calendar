@@ -3,7 +3,6 @@ package com.oxandon.calendar.demo;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,9 +56,6 @@ public class CalendarPopWindow extends PopupWindow implements OnCalendarSelectLi
         Date currentDate = new Date(System.currentTimeMillis());
         Date endDate = DateUtils.getLastDayFromMonth(currentDate);
         Date startDate = DateUtils.getDayYearAgo(endDate);
-        Log.d("debug", "==========endDate=========" + TimeUtil.dateText(endDate.getTime(), TimeUtil.YY_MD_HMS));
-        Log.d("debug", "==========startDate=========" + TimeUtil.dateText(startDate.getTime(), TimeUtil.YY_MD_HMS));
-        Log.d("debug", "==========currentDate=========" + TimeUtil.dateText(currentDate.getTime(), TimeUtil.YY_MD_HMS));
         mCalendarView.getAdapter().valid(null, TimeUtil.dateText(currentDate.getTime(), TimeUtil.YY_MD));
         mCalendarView.getAdapter().setOnCalendarSelectListener(this);
         mCalendarView.getAdapter().intervalNotes("开始", "结束");

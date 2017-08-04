@@ -116,7 +116,7 @@ public class DateUtils {
         } else {
             int months = months(sDate, eDate);
             Calendar calendar = calendar(min(sDate, eDate));
-            for (int i = 0; i <= months; i++) {
+            for (int i = 0; i < months; i++) {
                 dates.add(calendar.getTime());
                 int month = calendar.get(Calendar.MONTH);
                 month += 1;
