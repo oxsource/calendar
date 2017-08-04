@@ -7,6 +7,6 @@ import java.util.Date;
  * Created by peng on 2017/8/4.
  */
 
-public interface OnDayInMonthClickListener {
-    void onDayInMonthClick(Date date);
+public interface OnMonthClickListener {
+    void onMonthClick(Date date);
 }

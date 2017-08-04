@@ -12,7 +12,7 @@ import com.oxandon.calendar.annotation.DayStatus;
 import com.oxandon.calendar.protocol.DayEntity;
 import com.oxandon.calendar.protocol.MonthEntity;
 import com.oxandon.calendar.protocol.NInterval;
-import com.oxandon.calendar.protocol.OnDayInMonthClickListener;
+import com.oxandon.calendar.protocol.OnMonthClickListener;
 import com.oxandon.calendar.utils.DateUtils;
 import com.oxandon.calendar.utils.ViewUtils;
 
@@ -196,9 +196,9 @@ public class MonthView extends ViewGroup {
         return monthEntity;
     }
 
-    private OnDayInMonthClickListener onDayInMonthClickListener;
+    private OnMonthClickListener onDayInMonthClickListener;
 
-    public void setOnDayInMonthClickListener(OnDayInMonthClickListener listener) {
+    public void setOnDayInMonthClickListener(OnMonthClickListener listener) {
         onDayInMonthClickListener = listener;
     }
 
@@ -216,12 +216,10 @@ public class MonthView extends ViewGroup {
                 DayEntity entity = dayView.value();
                 Date month = new Date(monthEntity.date().getTime());
                 Date dayDate = DateUtils.specialDayInMonth(month, entity.intValue());
-                onDayInMonthClickListener.onDayInMonthClick(dayDate);
+                onDayInMonthClickListener.onMonthClick(dayDate);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     };
-
-
 }

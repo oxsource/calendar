@@ -6,11 +6,11 @@ import android.view.ViewGroup;
 
 import com.oxandon.calendar.protocol.Interval;
 import com.oxandon.calendar.protocol.MonthEntity;
-import com.oxandon.calendar.protocol.OnDayInMonthClickListener;
+import com.oxandon.calendar.protocol.OnCalendarSelectListener;
+import com.oxandon.calendar.protocol.OnMonthClickListener;
 import com.oxandon.calendar.utils.TimeUtil;
 import com.oxandon.calendar.view.MonthView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
  * Created by peng on 2017/8/3.
  */
 
-public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> implements OnDayInMonthClickListener {
+public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> implements OnMonthClickListener {
     private final String TAG = CalendarAdapter.class.getSimpleName();
     private final List<Date> dates = new ArrayList<>();
     private Interval<Date> valid = new Interval<>();
@@ -130,10 +130,17 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
 
 
     private Date lastClickDate = null;
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    private OnCalendarSelectListener calendarSelectListener;
+
+    public void setOnCalendarSelectListener(OnCalendarSelectListener listener) {
+        calendarSelectListener = listener;
+    }
 
     @Override
-    public void onDayInMonthClick(Date date) {
+    public void onMonthClick(Date date) {
+        if (null == calendarSelectListener) {
+            return;
+        }
         if (null == date) {
             Log.d(TAG, "onDayInMonthClick error,receive null date");
             return;
@@ -141,15 +148,18 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
         if (null == lastClickDate) {
             lastClickDate = date;
             select(date, date);
+            return;
+        }
+        if (lastClickDate.getTime() >= date.getTime()) {
+            lastClickDate = date;
+            select(date, date);
         } else {
-            if (lastClickDate.getTime() >= date.getTime()) {
-                lastClickDate = date;
-                select(date, date);
-            } else {
-                select(lastClickDate, date);
-                Log.d(TAG, "onDayInMonthClick:" + sdf.format(lastClickDate) + "," + sdf.format(date));
-                lastClickDate = null;
-            }
+            select(lastClickDate, date);
+            Interval<Date> interval = new Interval<>();
+            interval.left(lastClickDate).right(date);
+            calendarSelectListener.onCalendarSelect(interval);
+            Log.d(TAG, "onDayInMonthClick:" + lastClickDate.getTime() + "," + date.getTime());
+            lastClickDate = null;
         }
     }
 }
