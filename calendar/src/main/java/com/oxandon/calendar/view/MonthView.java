@@ -12,8 +12,11 @@ import com.oxandon.calendar.annotation.DayStatus;
 import com.oxandon.calendar.protocol.DayEntity;
 import com.oxandon.calendar.protocol.MonthEntity;
 import com.oxandon.calendar.protocol.NInterval;
+import com.oxandon.calendar.protocol.OnDayInMonthClickListener;
 import com.oxandon.calendar.utils.DateUtils;
 import com.oxandon.calendar.utils.ViewUtils;
+
+import java.util.Date;
 
 /**
  * 月份控件
@@ -157,8 +160,10 @@ public class MonthView extends ViewGroup {
                     //不响应选择事件
                     dayEntity.status(DayStatus.INVALID).valueStatus(DayStatus.INVALID).descStatus(DayStatus.INVALID);
                 }
+                dayViews[index].setOnClickListener(clickDayListener);
             } else {
                 dayEntity = DayEntity.obtain(DayStatus.INVALID, -1, "");
+                dayViews[index].setOnClickListener(null);
             }
             dayViews[index].value(dayEntity);
             dayViews[index].layout(offsetX, offsetY, offsetX + childWidth, childBottom);
@@ -190,4 +195,33 @@ public class MonthView extends ViewGroup {
     public MonthEntity value() {
         return monthEntity;
     }
+
+    private OnDayInMonthClickListener onDayInMonthClickListener;
+
+    public void setOnDayInMonthClickListener(OnDayInMonthClickListener listener) {
+        onDayInMonthClickListener = listener;
+    }
+
+    private final View.OnClickListener clickDayListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (!(v instanceof DayView)) {
+                return;
+            }
+            if (null == onDayInMonthClickListener) {
+                return;
+            }
+            try {
+                DayView dayView = (DayView) v;
+                DayEntity entity = dayView.value();
+                Date month = new Date(monthEntity.date().getTime());
+                Date dayDate = DateUtils.specialDayInMonth(month, entity.intValue());
+                onDayInMonthClickListener.onDayInMonthClick(dayDate);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+
 }

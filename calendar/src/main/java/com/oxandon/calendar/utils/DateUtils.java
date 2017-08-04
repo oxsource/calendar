@@ -204,4 +204,17 @@ public class DateUtils {
         }
         return range;
     }
+
+    /**
+     * 根据月份及日期索引计算出指定日期
+     *
+     * @param month
+     * @param index
+     * @return
+     */
+    public static Date specialDayInMonth(Date month, int index) {
+        Calendar calendar = calendar(month);
+        calendar.set(Calendar.DAY_OF_MONTH, index + 1);
+        return calendar.getTime();
+    }
 }

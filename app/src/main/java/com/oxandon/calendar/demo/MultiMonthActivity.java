@@ -23,8 +23,8 @@ public class MultiMonthActivity extends Activity {
 //        calendarView.getAdapter().valid(null, "2016-09-05");
 //        calendarView.getAdapter().valid("2016-09-05", null);
 
-        calendarView.getAdapter().select("2016-08-12", "2016-08-22");
-        calendarView.getAdapter().selectNote("开始", "结束");
+//        calendarView.getAdapter().select("2016-08-12", "2016-08-22");
+        calendarView.getAdapter().intervalNotes("开始", "结束");
         calendarView.show("2016-08-01", "2019-08-01", "yyyy-MM-dd");
     }
 }

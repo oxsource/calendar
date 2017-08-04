@@ -44,6 +44,10 @@ public class DayEntity {
         return value < 0 || value > MonthEntity.MAX_DAYS_OF_MONTH ? "" : String.valueOf(value + 1);
     }
 
+    public int intValue() {
+        return value;
+    }
+
     @DayStatus
     public int valueStatus() {
         return valueStatus;
