@@ -10,17 +10,17 @@ import android.widget.TextView;
 
 import com.oxandon.calendar.R;
 import com.oxandon.calendar.annotation.DayStatus;
-import com.oxandon.calendar.protocol.IDayView;
+import com.oxandon.calendar.protocol.DayEntity;
 
 /**
  * 日期控件
  * Created by peng on 2017/8/2.
  */
 
-public final class DayView extends LinearLayout implements IDayView {
+public final class DayView extends LinearLayout {
     private TextView tvDesc;
     private TextView tvDay;
-    private Integer value = Integer.valueOf(0);
+    private DayEntity entity;
 
     public DayView(Context context) {
         super(context);
@@ -50,27 +50,23 @@ public final class DayView extends LinearLayout implements IDayView {
         tvDay = (TextView) findViewById(R.id.tvDay);
     }
 
-    @Override
-    public void value(Integer index) {
-        value = index;
-        String content = index < 0 || index > MAX_DAYS_OF_MONTH ? "" : String.valueOf(index + 1);
-        tvDay.setText(content);
-    }
-
-    @Override
-    public Integer value() {
-        return value;
-    }
-
-    @Override
-    public void change(State state) {
+    public void value(DayEntity entity) {
+        if (null != value()) {
+            value().recycle();
+        }
+        this.entity = entity;
         //背景
-        setBackgroundStatus(state.status);
+        setBackgroundStatus(entity);
         //内容
-        setTextStatusColor(tvDay, state.valueStatus);
+        setTextStatusColor(tvDay, entity.valueStatus);
+        tvDay.setText(entity.value());
         //描述
-        tvDesc.setText(state.desc);
-        setTextStatusColor(tvDesc, state.descStatus);
+        tvDesc.setText(entity.desc());
+        setTextStatusColor(tvDesc, entity.descStatus);
+    }
+
+    public DayEntity value() {
+        return entity;
     }
 
     /**
@@ -111,10 +107,10 @@ public final class DayView extends LinearLayout implements IDayView {
     /**
      * 设置背景状态
      *
-     * @param status
+     * @param entity
      */
-    private void setBackgroundStatus(@DayStatus int status) {
-        switch (status) {
+    private void setBackgroundStatus(DayEntity entity) {
+        switch (entity.status) {
             //正常
             case DayStatus.NORMAL:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
@@ -123,7 +119,7 @@ public final class DayView extends LinearLayout implements IDayView {
             //不可用
             case DayStatus.INVALID:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
-                setTextStatusColor(tvDay, status);
+                setTextStatusColor(tvDay, entity.status);
                 setEnabled(false);
                 break;
             //范围内

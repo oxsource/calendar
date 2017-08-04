@@ -7,7 +7,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import static com.oxandon.calendar.annotation.DayStatus.BOUND_L;
 import static com.oxandon.calendar.annotation.DayStatus.BOUND_R;
-import static com.oxandon.calendar.annotation.DayStatus.IGNORE;
 import static com.oxandon.calendar.annotation.DayStatus.INVALID;
 import static com.oxandon.calendar.annotation.DayStatus.NORMAL;
 import static com.oxandon.calendar.annotation.DayStatus.RANGE;
@@ -17,7 +16,7 @@ import static com.oxandon.calendar.annotation.DayStatus.STRESS;
  * Created by peng on 2017/8/2.
  */
 
-@IntDef(value = {NORMAL, INVALID, RANGE, BOUND_L, BOUND_R, STRESS, IGNORE})
+@IntDef(value = {NORMAL, INVALID, RANGE, BOUND_L, BOUND_R, STRESS})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface DayStatus {
     //正常
@@ -32,6 +31,4 @@ public @interface DayStatus {
     int BOUND_R = 4;
     //强调
     int STRESS = 5;
-    //忽略
-    int IGNORE = -1;
 }

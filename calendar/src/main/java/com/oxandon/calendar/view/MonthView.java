@@ -9,24 +9,22 @@ import android.view.ViewGroup;
 
 import com.oxandon.calendar.R;
 import com.oxandon.calendar.annotation.DayStatus;
-import com.oxandon.calendar.protocol.IDayView;
-import com.oxandon.calendar.protocol.IMonthView;
+import com.oxandon.calendar.protocol.DayEntity;
+import com.oxandon.calendar.protocol.MonthEntity;
 import com.oxandon.calendar.utils.DateUtils;
 import com.oxandon.calendar.utils.ViewUtils;
-
-import java.util.Date;
 
 /**
  * 月份控件
  * Created by peng on 2017/8/2.
  */
 
-public class MonthView extends ViewGroup implements IMonthView {
-    private final DayView[] dayViews = new DayView[MAX_DAYS_OF_MONTH];
-    private final View[] lines = new View[MAX_HORIZONTAL_LINES];
+public class MonthView extends ViewGroup {
+    private final DayView[] dayViews = new DayView[MonthEntity.MAX_DAYS_OF_MONTH];
+    private final View[] lines = new View[MonthEntity.MAX_HORIZONTAL_LINES];
     private final int LINE_HEIGHT;
 
-    private Date value;
+    private MonthEntity entity;
     private int isTodayOfMonth = -1;
     //location
     private int position = 0;
@@ -61,23 +59,25 @@ public class MonthView extends ViewGroup implements IMonthView {
             addView(view);
             lines[j] = view;
         }
-        value(new Date());
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        if (null == value()) {
+            return;
+        }
         int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
         dayViews[0].measure(widthMeasureSpec, heightMeasureSpec);
         int childrenHeight = 0;
         //calc need rows
         int amount = position + offset;
-        dayRows = (amount / WEEK_DAYS) + (((amount % WEEK_DAYS) != 0) ? 1 : 0);
+        dayRows = (amount / MonthEntity.WEEK_DAYS) + (((amount % MonthEntity.WEEK_DAYS) != 0) ? 1 : 0);
         //measure container
         childrenHeight += dayViews[0].getMeasuredHeight() * dayRows;
         childrenHeight += (dayRows) * LINE_HEIGHT;
         setMeasuredDimension(totalWidth, childrenHeight);
         //measure DayViews
-        childWidth = totalWidth / WEEK_DAYS;
+        childWidth = totalWidth / MonthEntity.WEEK_DAYS;
         childHeight = dayViews[0].getMeasuredHeight();
         int childWidthSpec = MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY);
         int childHeightSpec = MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY);
@@ -116,6 +116,9 @@ public class MonthView extends ViewGroup implements IMonthView {
 
     @Override
     protected void onLayout(boolean b, int left, int top, int right, int bottom) {
+        if (null == value()) {
+            return;
+        }
         int offsetX = 0, offsetY = 0;
         SplitLinesLayoutControl lineControl = new SplitLinesLayoutControl(lines);
         for (int i = 0; i < position; i++) {
@@ -123,25 +126,40 @@ public class MonthView extends ViewGroup implements IMonthView {
         }
         int childBottom = offsetY + childHeight;
         boolean lastIsRightBound = false;//上一个是否是右边界
+
+        int[] validRange = DateUtils.containDaysIndex(value().date, entity.valid.left, entity.valid.right);
+//        int[] selectRange = DateUtils.containDaysIndex(value().date, entity.select.left, entity.select.right);
+
         for (int index = 0, move = position + 1; index < dayViews.length; index++, move++) {
-            boolean rightBound = move % 7 == 0;
-            Integer value;
-            IDayView.State state;
+            boolean rightBound = move % MonthEntity.WEEK_DAYS == 0;
+            DayEntity entity;
             if (index < offset) {
-                value = Integer.valueOf(index);
                 //set state
                 boolean isToday = index == isTodayOfMonth;
-                state = new IDayView.State();
-                state.status = DayStatus.NORMAL;
-                state.valueStatus = (lastIsRightBound || rightBound) ? DayStatus.STRESS : DayStatus.NORMAL;
-                state.desc = isToday ? STR_TODAY : "";
-                state.descStatus = isToday ? DayStatus.STRESS : DayStatus.NORMAL;
+                entity = DayEntity.obtain(DayStatus.NORMAL, index, isToday ? MonthEntity.STR_TODAY : "");
+                entity.valueStatus = (lastIsRightBound || rightBound) ? DayStatus.STRESS : DayStatus.NORMAL;
+                entity.descStatus = isToday ? DayStatus.STRESS : DayStatus.NORMAL;
+                //valid
+                boolean contain = (index >= validRange[0]) && (index <= validRange[1]);
+                if (contain) {
+                    //select
+//                    if ((index > selectRange[0]) && (index < selectRange[1])) {
+                    //in range
+//                    } else if (index == selectRange[0]) {
+                    //
+//                    } else if (index == selectRange[1]) {
+
+//                    }
+                } else {
+                    //不响应选择事件
+                    entity.status = DayStatus.INVALID;
+                    entity.valueStatus = DayStatus.INVALID;
+                    entity.descStatus = DayStatus.INVALID;
+                }
             } else {
-                value = Integer.valueOf(-1);
-                state = new IDayView.State(DayStatus.INVALID, "");
+                entity = DayEntity.obtain(DayStatus.INVALID, -1, "");
             }
-            dayViews[index].value(value);
-//            dayViews[index].change(state);
+            dayViews[index].value(entity);
             dayViews[index].layout(offsetX, offsetY, offsetX + childWidth, childBottom);
             if (rightBound) {
                 offsetX = 0;
@@ -157,35 +175,18 @@ public class MonthView extends ViewGroup implements IMonthView {
         lineControl.layout(offsetY + childHeight);
     }
 
-    @Override
-    public void value(@NonNull Date date) {
-        position = DateUtils.get().firstDayOfMonthIndex(date);
-        offset = DateUtils.get().maxDaysOfMonth(date);
-        isTodayOfMonth = DateUtils.get().isTodayOfMonth(date);
+    public void value(@NonNull MonthEntity entity) {
         if (null != value()) {
-            requestLayout();
+            value().recycle();
         }
-        value = date;
+        this.entity = entity;
+        position = DateUtils.firstDayOfMonthIndex(entity.date);
+        offset = DateUtils.maxDaysOfMonth(entity.date);
+        isTodayOfMonth = DateUtils.isTodayOfMonth(entity.date);
+        requestLayout();
     }
 
-    @Override
-    public Date value() {
-        return value;
-    }
-
-    @Override
-    public void select(Interval interval) {
-
-    }
-
-    @Override
-    public void valid(Interval interval) {
-        int[] range = DateUtils.get().containDaysIndex(value(), interval.left, interval.right);
-        IDayView.State normal = new IDayView.State(DayStatus.NORMAL, null);
-        IDayView.State invalid = new IDayView.State(DayStatus.INVALID, null);
-        for (int i = 0; i < offset; i++) {
-            boolean contain = (i >= range[0]) && (i <= range[1]);
-            dayViews[i].change(contain ? normal : invalid);
-        }
+    public MonthEntity value() {
+        return entity;
     }
 }

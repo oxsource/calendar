@@ -3,7 +3,8 @@ package com.oxandon.calendar.adapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.oxandon.calendar.protocol.IMonthView;
+import com.oxandon.calendar.protocol.Interval;
+import com.oxandon.calendar.protocol.MonthEntity;
 import com.oxandon.calendar.utils.TimeUtil;
 import com.oxandon.calendar.view.MonthView;
 
@@ -17,7 +18,8 @@ import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     private final List<Date> dates = new ArrayList<>();
-    private IMonthView.Interval interval = new IMonthView.Interval();
+    private Interval valid = new Interval();
+    private Interval select = new Interval();
 
     public CalendarAdapter() {
     }
@@ -35,8 +37,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
         try {
             Date from = TimeUtil.date(fromDay, TimeUtil.YY_MD);
             Date to = TimeUtil.date(toDay, TimeUtil.YY_MD);
-            interval.left = from;
-            interval.right = to;
+            valid.left = from;
+            valid.right = to;
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -54,9 +56,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     @Override
     public void onBindViewHolder(CalendarViewHolder holder, int position) {
-        Date date = dates.get(position);
-        holder.view().value(date);
-        holder.view().valid(interval);
+        MonthEntity entity = MonthEntity.obtain();
+        entity.date = dates.get(position);
+        entity.valid = valid;
+        entity.select = select;
+        holder.view().value(entity);
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
     }
 
     @Override

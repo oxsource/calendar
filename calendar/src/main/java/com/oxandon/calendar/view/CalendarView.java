@@ -99,7 +99,7 @@ public class CalendarView extends LinearLayout {
     }
 
     public void show(Date sDate, Date eDate) {
-        List<Date> dates = DateUtils.get().fillMonths(sDate, eDate);
+        List<Date> dates = DateUtils.fillMonths(sDate, eDate);
         getAdapter().update(dates);
     }
 

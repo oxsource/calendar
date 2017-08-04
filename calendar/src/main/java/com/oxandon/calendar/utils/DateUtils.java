@@ -1,7 +1,5 @@
 package com.oxandon.calendar.utils;
 
-import com.oxandon.calendar.protocol.ICalendar;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -12,42 +10,43 @@ import java.util.Locale;
  * Created by peng on 2017/8/2.
  */
 
-public class DateUtils implements ICalendar {
-    private final static ThreadLocal<ICalendar> threadLocal = new ThreadLocal<>();
-    private static ICalendar instance;
+public class DateUtils {
 
-    public static ICalendar get() {
-        if (null == threadLocal.get()) {
-            synchronized (DateUtils.class) {
-                if (null == instance) {
-                    instance = new DateUtils();
-                }
-                threadLocal.set(instance);
-            }
-        }
-        return threadLocal.get();
-    }
-
-    private Calendar calendar(Date date) {
+    private static Calendar calendar(Date date) {
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         calendar.setTime(date);
         return calendar;
     }
 
-
-    public int maxDaysOfMonth(Date date) {
+    /**
+     * 当月最大天数
+     *
+     * @param date
+     * @return
+     */
+    public static int maxDaysOfMonth(Date date) {
         return calendar(date).getActualMaximum(Calendar.DATE);
     }
 
-    @Override
-    public int firstDayOfMonthIndex(Date date) {
+    /**
+     * 当月第一天在月份表中的索引
+     *
+     * @param date
+     * @return
+     */
+    public static int firstDayOfMonthIndex(Date date) {
         Calendar calendar = calendar(date);
         calendar.set(Calendar.DAY_OF_MONTH, 1);
         return calendar.get(Calendar.DAY_OF_WEEK) - 1;
     }
 
-    @Override
-    public int isTodayOfMonth(Date date) {
+    /**
+     * 给定日期是否是今天所在的月份
+     *
+     * @param date
+     * @return 今天是当月几号
+     */
+    public static int isTodayOfMonth(Date date) {
         Calendar current = calendar(new Date());
         Calendar calendar = calendar(date);
         if (!equals(current, calendar, Calendar.YEAR)) {
@@ -59,8 +58,15 @@ public class DateUtils implements ICalendar {
         return current.get(Calendar.DAY_OF_MONTH) - 1;
     }
 
-    @Override
-    public boolean equals(Calendar calendarA, Calendar calendarB, int field) {
+    /**
+     * 比较是否相同
+     *
+     * @param calendarA
+     * @param calendarB
+     * @param field
+     * @return
+     */
+    public static boolean equals(Calendar calendarA, Calendar calendarB, int field) {
         boolean same;
         try {
             same = calendarA.get(field) == calendarB.get(field);
@@ -70,8 +76,14 @@ public class DateUtils implements ICalendar {
         return same;
     }
 
-    @Override
-    public int months(Date sDate, Date eDate) {
+    /**
+     * 区间内有多少个月
+     *
+     * @param sDate
+     * @param eDate
+     * @return
+     */
+    public static int months(Date sDate, Date eDate) {
         Calendar before = calendar(min(sDate, eDate));
         Calendar after = calendar(max(sDate, eDate));
         int diffYear = after.get(Calendar.YEAR) - before.get(Calendar.YEAR);
@@ -79,18 +91,22 @@ public class DateUtils implements ICalendar {
         return diffYear * 12 + diffMonth;
     }
 
-    @Override
-    public Date max(Date sDate, Date eDate) {
+    public static Date max(Date sDate, Date eDate) {
         return sDate.getTime() > eDate.getTime() ? sDate : eDate;
     }
 
-    @Override
-    public Date min(Date sDate, Date eDate) {
+    public static Date min(Date sDate, Date eDate) {
         return sDate.getTime() > eDate.getTime() ? eDate : sDate;
     }
 
-    @Override
-    public List<Date> fillMonths(Date sDate, Date eDate) {
+    /**
+     * 获取区间内各月的Date
+     *
+     * @param sDate
+     * @param eDate
+     * @return
+     */
+    public static List<Date> fillMonths(Date sDate, Date eDate) {
         List<Date> dates = new ArrayList<>();
         if (null == sDate || null == eDate) {
             dates.add(new Date());
@@ -107,8 +123,16 @@ public class DateUtils implements ICalendar {
         return dates;
     }
 
-    @Override
-    public int[] containDaysIndex(Date month, Date sDay, Date eDay) {
+    /**
+     * 目标月份有哪些天在区间内,返回索引值
+     * b不在范围内时返回[-1,-1]
+     *
+     * @param month 目标月份
+     * @param sDay  开始日期
+     * @param eDay  结束日期
+     * @return 一维数组两个元素表示起始位置
+     */
+    public static int[] containDaysIndex(Date month, Date sDay, Date eDay) {
         final int[] range = new int[]{-1, -1};
         if (null == month) {
             return range;
