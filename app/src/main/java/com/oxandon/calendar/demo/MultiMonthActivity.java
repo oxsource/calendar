@@ -2,10 +2,10 @@ package com.oxandon.calendar.demo;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.widget.Toast;
 
-import com.oxandon.calendar.protocol.Interval;
 import com.oxandon.calendar.protocol.OnCalendarSelectListener;
 import com.oxandon.calendar.utils.TimeUtil;
 import com.oxandon.calendar.view.CalendarView;
@@ -32,11 +32,19 @@ public class MultiMonthActivity extends Activity {
 //        calendarView.getAdapter().select("2016-08-12", "2016-08-22");
         calendarView.getAdapter().intervalNotes("开始", "结束");
         calendarView.getAdapter().setOnCalendarSelectListener(new OnCalendarSelectListener() {
+
             @Override
-            public void onCalendarSelect(Interval<Date> dateInterval) {
-                String leftTime = TimeUtil.dateText(dateInterval.left().getTime(), TimeUtil.YY_MD);
-                String rightTime = TimeUtil.dateText(dateInterval.right().getTime(), TimeUtil.YY_MD);
+            public void onCalendarSingleSelect(@NonNull Date date) {
+                String time = TimeUtil.dateText(date.getTime(), TimeUtil.YY_MD);
+                Toast.makeText(getBaseContext(), time, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCalendarBothSelect(@NonNull Date before, @NonNull Date after) {
+                String leftTime = TimeUtil.dateText(before.getTime(), TimeUtil.YY_MD);
+                String rightTime = TimeUtil.dateText(after.getTime(), TimeUtil.YY_MD);
                 Toast.makeText(getBaseContext(), leftTime + "," + rightTime, Toast.LENGTH_SHORT).show();
+
             }
         });
         calendarView.show("2016-08-01", "2019-08-01", "yyyy-MM-dd");

@@ -148,16 +148,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
         if (null == lastClickDate) {
             lastClickDate = date;
             select(date, date);
+            calendarSelectListener.onCalendarSingleSelect(date);
             return;
         }
         if (lastClickDate.getTime() >= date.getTime()) {
             lastClickDate = date;
             select(date, date);
+            calendarSelectListener.onCalendarSingleSelect(date);
         } else {
             select(lastClickDate, date);
-            Interval<Date> interval = new Interval<>();
-            interval.left(lastClickDate).right(date);
-            calendarSelectListener.onCalendarSelect(interval);
+            calendarSelectListener.onCalendarBothSelect(lastClickDate, date);
             Log.d(TAG, "onDayInMonthClick:" + lastClickDate.getTime() + "," + date.getTime());
             lastClickDate = null;
         }

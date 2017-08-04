@@ -1,5 +1,7 @@
 package com.oxandon.calendar.protocol;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
@@ -8,5 +10,7 @@ import java.util.Date;
  */
 
 public interface OnCalendarSelectListener {
-    void onCalendarSelect(Interval<Date> dateInterval);
+    void onCalendarSingleSelect(@NonNull Date date);
+
+    void onCalendarBothSelect(@NonNull Date before, @NonNull Date after);
 }
