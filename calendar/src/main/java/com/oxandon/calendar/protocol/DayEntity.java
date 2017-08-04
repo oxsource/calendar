@@ -1,7 +1,5 @@
 package com.oxandon.calendar.protocol;
 
-import android.util.Log;
-
 import com.oxandon.calendar.annotation.DayStatus;
 
 import java.util.ArrayList;
@@ -15,28 +13,74 @@ import java.util.List;
 
 public class DayEntity {
     @DayStatus
-    public int status;
-    public int value;
+    private int status;
+    private int value;
     @DayStatus
-    public int valueStatus;
-    public String desc;
+    private int valueStatus;
+    private String desc;
     @DayStatus
-    public int descStatus;
-    public String note;
+    private int descStatus;
+    private String note;
 
     private DayEntity() {
+    }
+
+    @DayStatus
+    public int status() {
+        return status;
+    }
+
+    public DayEntity status(@DayStatus int status) {
+        this.status = status;
+        return this;
+    }
+
+    public DayEntity value(int value) {
+        this.value = value;
+        return this;
     }
 
     public String value() {
         return value < 0 || value > MonthEntity.MAX_DAYS_OF_MONTH ? "" : String.valueOf(value + 1);
     }
 
+    @DayStatus
+    public int valueStatus() {
+        return valueStatus;
+    }
+
+    public DayEntity valueStatus(@DayStatus int valueStatus) {
+        this.valueStatus = valueStatus;
+        return this;
+    }
+
     public String desc() {
         return null == desc ? "" : desc;
     }
 
+
+    public DayEntity desc(String desc) {
+        this.desc = desc;
+        return this;
+    }
+
+    @DayStatus
+    public int descStatus() {
+        return descStatus;
+    }
+
+    public DayEntity descStatus(@DayStatus int descStatus) {
+        this.descStatus = descStatus;
+        return this;
+    }
+
     public String note() {
         return null == note ? "" : note;
+    }
+
+    public DayEntity note(String note) {
+        this.note = note;
+        return this;
     }
 
     public void recycle() {
@@ -52,16 +96,8 @@ public class DayEntity {
 
     private static final List<DayEntity> pools = new ArrayList<>();
 
-    private static long newCount = 0;
-
     public static DayEntity obtain(@DayStatus int status, int value, String desc) {
-        boolean empty = 0 == pools.size();
-        DayEntity entity = empty ? new DayEntity() : pools.remove(0);
-        if (empty) {
-            newCount += 1;
-        }
-        Log.d("pppp", "DayEntity pool size=" + pools.size() + ",newCount= " + newCount);
-
+        DayEntity entity = 0 == pools.size() ? new DayEntity() : pools.remove(0);
         entity.status = status;
         entity.value = value;
         entity.valueStatus = status;

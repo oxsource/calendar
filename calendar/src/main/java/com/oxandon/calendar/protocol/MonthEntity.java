@@ -14,21 +14,57 @@ public class MonthEntity {
     public static final int MAX_DAYS_OF_MONTH = 31;
     public static final String STR_TODAY = "今天";
 
-    public Date date;
-    public Interval<Date> valid;
-    public Interval<Date> select;
+    private Date date;
+    private Interval<Date> valid;
+    private Interval<Date> select;
+    private Interval<String> selectNote;
 
     private MonthEntity() {
     }
 
+    public Date date() {
+        return date;
+    }
+
+    public MonthEntity date(Date date) {
+        this.date = date;
+        return this;
+    }
+
+    public Interval<Date> valid() {
+        return valid;
+    }
+
+    public MonthEntity valid(Interval<Date> valid) {
+        this.valid = valid;
+        return this;
+    }
+
+    public Interval<Date> select() {
+        return select;
+    }
+
+    public MonthEntity select(Interval<Date> select) {
+        this.select = select;
+        return this;
+    }
+
+    public Interval<String> selectNote() {
+        return selectNote;
+    }
+
+    public MonthEntity selectNote(Interval<String> selectNote) {
+        this.selectNote = selectNote;
+        return this;
+    }
+
     private final static List<MonthEntity> pools = new ArrayList<>();
 
-    public static MonthEntity obtain() {
-        if (pools.size() == 0) {
-            return new MonthEntity();
-        } else {
-            return pools.remove(0);
-        }
+    public static MonthEntity obtain(Interval<Date> valid, Interval<Date> select) {
+        MonthEntity entity = pools.size() == 0 ? new MonthEntity() : pools.remove(0);
+        entity.valid = valid;
+        entity.select = select;
+        return entity;
     }
 
     public void recycle() {
@@ -36,6 +72,7 @@ public class MonthEntity {
             date = null;
             valid = null;
             select = null;
+            selectNote = null;
             pools.add(this);
         }
     }

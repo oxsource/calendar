@@ -1,5 +1,8 @@
 package com.oxandon.calendar.utils;
 
+import com.oxandon.calendar.protocol.Interval;
+import com.oxandon.calendar.protocol.NInterval;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -124,31 +127,36 @@ public class DateUtils {
     }
 
     /**
-     * 目标月份有哪些天在区间内,返回索引值
-     * b不在范围内时返回[-1,-1]
+     * 目标月份有哪些天在区间内,返回索引值区间
+     * 不在范围内时返回(-1,-1)
      *
-     * @param month 目标月份
-     * @param sDay  开始日期
-     * @param eDay  结束日期
-     * @return 一维数组两个元素表示起始位置
+     * @param month        目标月份
+     * @param dateInterval 开始,结束日期区间
+     * @return 起始位置区间
      */
-    public static int[] containDaysIndex(Date month, Date sDay, Date eDay) {
-        final int[] range = new int[]{-1, -1};
-        if (null == month) {
+    public static NInterval daysInterval(Date month, Interval<Date> dateInterval) {
+        final NInterval range = new NInterval();
+        if (null == month || null == dateInterval) {
             return range;
         }
         final int maxDaysOfMonth = maxDaysOfMonth(month);
+        Date sDay;
+        Date eDay;
         //保证sDay和eDay不为空
-        if (null == sDay || null == eDay) {
+        if (null == dateInterval.left()) {
             Calendar safeCalendar = calendar(month);
-            if (null == sDay) {
-                safeCalendar.set(Calendar.DAY_OF_MONTH, 1);
-                sDay = safeCalendar.getTime();
-            }
-            if (null == eDay) {
-                safeCalendar.set(Calendar.DAY_OF_MONTH, maxDaysOfMonth);
-                eDay = safeCalendar.getTime();
-            }
+            safeCalendar.set(Calendar.DAY_OF_MONTH, 1);
+            sDay = safeCalendar.getTime();
+        } else {
+            sDay = new Date(dateInterval.left().getTime());
+        }
+        if (null == dateInterval.right()) {
+            Date date = max(sDay, month);
+            Calendar safeCalendar = calendar(date);
+            safeCalendar.set(Calendar.DAY_OF_MONTH, maxDaysOfMonth);
+            eDay = safeCalendar.getTime();
+        } else {
+            eDay = new Date(dateInterval.right().getTime());
         }
         //保证日期顺序
         sDay = min(sDay, eDay);
@@ -172,18 +180,26 @@ public class DateUtils {
             }
         }
         calendars[0].set(Calendar.DAY_OF_MONTH, 1);
-        long dayIndex = diffDays[0] + calendars[0].get(Calendar.DAY_OF_YEAR);
-        long limitA = diffDays[1] + calendars[1].get(Calendar.DAY_OF_YEAR);
-        long limitB = diffDays[2] + calendars[2].get(Calendar.DAY_OF_YEAR);
+        final long dayIndex = diffDays[0] + calendars[0].get(Calendar.DAY_OF_YEAR);
+        final long limitA = diffDays[1] + calendars[1].get(Calendar.DAY_OF_YEAR);
+        final long limitB = diffDays[2] + calendars[2].get(Calendar.DAY_OF_YEAR);
 
         long temp;
         for (int i = 0; i < maxDaysOfMonth; i++) {
             temp = dayIndex + i;
             boolean contain = (temp >= limitA) && (temp <= limitB);
-            if (range[0] < 0 && contain) {
-                range[0] = i;
-            } else if (range[0] >= 0 && contain) {
-                range[1] = i;
+            if (!contain) {
+                continue;
+            }
+            if (range.left() < 0) {
+                range.left(i);
+            }
+            range.right(i);
+            if (limitA == temp) {
+                range.lBound(i);
+            }
+            if (limitB == temp) {
+                range.rBound(i);
             }
         }
         return range;

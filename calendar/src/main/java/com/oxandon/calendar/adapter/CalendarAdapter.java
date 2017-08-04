@@ -18,8 +18,9 @@ import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     private final List<Date> dates = new ArrayList<>();
-    private Interval valid = new Interval();
-    private Interval select = new Interval();
+    private Interval<Date> valid = new Interval();
+    private Interval<Date> select = new Interval();
+    private Interval<String> selectNote = new Interval<>();
 
     public CalendarAdapter() {
     }
@@ -36,11 +37,30 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     public void valid(String fromDay, String toDay) {
         try {
             Date from = TimeUtil.date(fromDay, TimeUtil.YY_MD);
-            Date to = TimeUtil.date(toDay, TimeUtil.YY_MD);
-            valid.left = from;
-            valid.right = to;
+            valid.left(from);
         } catch (Exception e) {
-            e.printStackTrace();
+            valid.left(null);
+        }
+        try {
+            Date to = TimeUtil.date(toDay, TimeUtil.YY_MD);
+            valid.right(to);
+        } catch (Exception e) {
+            valid.right(null);
+        }
+    }
+
+    public void selectNote(String noteFrom, String noteTo) {
+        selectNote.left(noteFrom).right(noteTo);
+    }
+
+    public void select(String fromDay, String toDay) {
+        try {
+            Date from = TimeUtil.date(fromDay, TimeUtil.YY_MD);
+            Date to = TimeUtil.date(toDay, TimeUtil.YY_MD);
+            select.left(from).right(to);
+        } catch (Exception e) {
+            select.left(null);
+            select.right(null);
         }
     }
 
@@ -56,10 +76,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
 
     @Override
     public void onBindViewHolder(CalendarViewHolder holder, int position) {
-        MonthEntity entity = MonthEntity.obtain();
-        entity.date = dates.get(position);
-        entity.valid = valid;
-        entity.select = select;
+        MonthEntity entity = MonthEntity.obtain(valid, select)
+                .date(dates.get(position))
+                .selectNote(selectNote);
         holder.view().value(entity);
     }
 

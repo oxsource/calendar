@@ -58,11 +58,11 @@ public final class DayView extends LinearLayout {
         //背景
         setBackgroundStatus(entity);
         //内容
-        setTextStatusColor(tvDay, entity.valueStatus);
+        setTextStatusColor(tvDay, entity.valueStatus());
         tvDay.setText(entity.value());
         //描述
         tvDesc.setText(entity.desc());
-        setTextStatusColor(tvDesc, entity.descStatus);
+        setTextStatusColor(tvDesc, entity.descStatus());
     }
 
     public DayEntity value() {
@@ -110,7 +110,7 @@ public final class DayView extends LinearLayout {
      * @param entity
      */
     private void setBackgroundStatus(DayEntity entity) {
-        switch (entity.status) {
+        switch (entity.status()) {
             //正常
             case DayStatus.NORMAL:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
@@ -119,7 +119,7 @@ public final class DayView extends LinearLayout {
             //不可用
             case DayStatus.INVALID:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
-                setTextStatusColor(tvDay, entity.status);
+                setTextStatusColor(tvDay, entity.status());
                 setEnabled(false);
                 break;
             //范围内

@@ -11,6 +11,7 @@ import com.oxandon.calendar.R;
 import com.oxandon.calendar.annotation.DayStatus;
 import com.oxandon.calendar.protocol.DayEntity;
 import com.oxandon.calendar.protocol.MonthEntity;
+import com.oxandon.calendar.protocol.NInterval;
 import com.oxandon.calendar.utils.DateUtils;
 import com.oxandon.calendar.utils.ViewUtils;
 
@@ -24,7 +25,7 @@ public class MonthView extends ViewGroup {
     private final View[] lines = new View[MonthEntity.MAX_HORIZONTAL_LINES];
     private final int LINE_HEIGHT;
 
-    private MonthEntity entity;
+    private MonthEntity monthEntity;
     private int isTodayOfMonth = -1;
     //location
     private int position = 0;
@@ -127,39 +128,39 @@ public class MonthView extends ViewGroup {
         int childBottom = offsetY + childHeight;
         boolean lastIsRightBound = false;//上一个是否是右边界
 
-        int[] validRange = DateUtils.containDaysIndex(value().date, entity.valid.left, entity.valid.right);
-//        int[] selectRange = DateUtils.containDaysIndex(value().date, entity.select.left, entity.select.right);
-
+        NInterval validRange = DateUtils.daysInterval(value().date(), monthEntity.valid());
+        NInterval selectRange = null;
+        if (monthEntity.select().bothNoNull()) {
+            selectRange = DateUtils.daysInterval(value().date(), monthEntity.select());
+        }
         for (int index = 0, move = position + 1; index < dayViews.length; index++, move++) {
             boolean rightBound = move % MonthEntity.WEEK_DAYS == 0;
-            DayEntity entity;
+            DayEntity dayEntity;
             if (index < offset) {
                 //set state
                 boolean isToday = index == isTodayOfMonth;
-                entity = DayEntity.obtain(DayStatus.NORMAL, index, isToday ? MonthEntity.STR_TODAY : "");
-                entity.valueStatus = (lastIsRightBound || rightBound) ? DayStatus.STRESS : DayStatus.NORMAL;
-                entity.descStatus = isToday ? DayStatus.STRESS : DayStatus.NORMAL;
+                dayEntity = DayEntity.obtain(DayStatus.NORMAL, index, isToday ? MonthEntity.STR_TODAY : "")
+                        .valueStatus((lastIsRightBound || rightBound) ? DayStatus.STRESS : DayStatus.NORMAL)
+                        .descStatus(isToday ? DayStatus.STRESS : DayStatus.NORMAL);
                 //valid
-                boolean contain = (index >= validRange[0]) && (index <= validRange[1]);
-                if (contain) {
-                    //select
-//                    if ((index > selectRange[0]) && (index < selectRange[1])) {
-                    //in range
-//                    } else if (index == selectRange[0]) {
-                    //
-//                    } else if (index == selectRange[1]) {
-
-//                    }
+                if (validRange.contain(index)) {
+                    if (null != selectRange && selectRange.contain(index)) {
+                        if (index == selectRange.lBound()) {
+                            dayEntity.status(DayStatus.BOUND_L).note(monthEntity.selectNote().left());
+                        } else if (index == selectRange.rBound()) {
+                            dayEntity.status(DayStatus.BOUND_R).note(monthEntity.selectNote().right());
+                        } else {
+                            dayEntity.status(DayStatus.RANGE);
+                        }
+                    }
                 } else {
                     //不响应选择事件
-                    entity.status = DayStatus.INVALID;
-                    entity.valueStatus = DayStatus.INVALID;
-                    entity.descStatus = DayStatus.INVALID;
+                    dayEntity.status(DayStatus.INVALID).valueStatus(DayStatus.INVALID).descStatus(DayStatus.INVALID);
                 }
             } else {
-                entity = DayEntity.obtain(DayStatus.INVALID, -1, "");
+                dayEntity = DayEntity.obtain(DayStatus.INVALID, -1, "");
             }
-            dayViews[index].value(entity);
+            dayViews[index].value(dayEntity);
             dayViews[index].layout(offsetX, offsetY, offsetX + childWidth, childBottom);
             if (rightBound) {
                 offsetX = 0;
@@ -179,14 +180,14 @@ public class MonthView extends ViewGroup {
         if (null != value()) {
             value().recycle();
         }
-        this.entity = entity;
-        position = DateUtils.firstDayOfMonthIndex(entity.date);
-        offset = DateUtils.maxDaysOfMonth(entity.date);
-        isTodayOfMonth = DateUtils.isTodayOfMonth(entity.date);
+        this.monthEntity = entity;
+        position = DateUtils.firstDayOfMonthIndex(entity.date());
+        offset = DateUtils.maxDaysOfMonth(entity.date());
+        isTodayOfMonth = DateUtils.isTodayOfMonth(entity.date());
         requestLayout();
     }
 
     public MonthEntity value() {
-        return entity;
+        return monthEntity;
     }
 }
