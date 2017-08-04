@@ -18,8 +18,8 @@ import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> {
     private final List<Date> dates = new ArrayList<>();
-    private Interval<Date> valid = new Interval();
-    private Interval<Date> select = new Interval();
+    private Interval<Date> valid = new Interval<>();
+    private Interval<Date> select = new Interval<>();
     private Interval<String> selectNote = new Interval<>();
 
     public CalendarAdapter() {

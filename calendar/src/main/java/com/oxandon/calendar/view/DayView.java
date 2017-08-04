@@ -55,14 +55,14 @@ public final class DayView extends LinearLayout {
             value().recycle();
         }
         this.entity = entity;
-        //背景
-        setBackgroundStatus(entity);
         //内容
-        setTextStatusColor(tvDay, entity.valueStatus());
         tvDay.setText(entity.value());
+        setTextStatusColor(tvDay, entity.valueStatus());
         //描述
         tvDesc.setText(entity.desc());
         setTextStatusColor(tvDesc, entity.descStatus());
+        //背景
+        setBackgroundStatus(entity);
     }
 
     public DayEntity value() {
@@ -129,10 +129,16 @@ public final class DayView extends LinearLayout {
                 break;
             //左边界
             case DayStatus.BOUND_L:
+                tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tvDesc.setText(entity.note());
                 setBackgroundResource(R.drawable.range_lbg);
                 break;
             //右边界
             case DayStatus.BOUND_R:
+                tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tvDesc.setText(entity.note());
                 setBackgroundResource(R.drawable.range_rbg);
                 break;
             //强调

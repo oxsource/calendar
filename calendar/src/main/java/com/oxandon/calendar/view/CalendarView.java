@@ -1,8 +1,10 @@
 package com.oxandon.calendar.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -73,6 +75,7 @@ public class CalendarView extends LinearLayout {
         GridView weekView = (GridView) findViewById(R.id.weekView);
         weekView.setNumColumns(adapter.getCount());
         weekView.setAdapter(adapter);
+        weekView.setSelector(new ColorDrawable(Color.TRANSPARENT));
     }
 
     public void initDecoration(RecyclerView bodyView) {
