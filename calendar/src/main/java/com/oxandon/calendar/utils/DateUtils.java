@@ -217,4 +217,29 @@ public class DateUtils {
         calendar.set(Calendar.DAY_OF_MONTH, index + 1);
         return calendar.getTime();
     }
+
+    /**
+     * 获取某月最后一天日期
+     *
+     * @param date 月份
+     * @return date月最后一天日期
+     */
+    public static Date getLastDayFromMonth(Date date) {
+        Calendar calendar = calendar(date);
+        calendar.set(Calendar.DAY_OF_MONTH, maxDaysOfMonth(date));
+        return calendar.getTime();
+    }
+
+    /**
+     * 获取指定Date一年前的某月第一天日期
+     *
+     * @param date 制定日期
+     * @return 指定Date一年前的某月第一天日期
+     */
+    public static Date getDayYearAgo(Date date) {
+        Calendar calendar = calendar(date);
+        calendar.add(Calendar.MONTH, -11);
+        calendar.set(Calendar.DAY_OF_MONTH, 0);
+        return calendar.getTime();
+    }
 }

@@ -43,7 +43,7 @@ public class CalendarView extends LinearLayout {
     }
 
     public CalendarView(Context context, @Nullable AttributeSet attrs) {
-        this(context, attrs, -1);
+        this(context, attrs, 0);
     }
 
     public CalendarView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {

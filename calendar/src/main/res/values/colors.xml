@@ -8,7 +8,7 @@
     <color name="common_bg_color">#FFFFFF</color>
     <color name="invalid_bg_color">#9C9C9C</color>
     <color name="range_bg_color">#ABEAE2</color>
-    <color name="round_bg_color">#05C0AB</color>
+    <color name="bound_bg_color">#05C0AB</color>
 
     <color name="week_bg_color">#FAFAFA</color>
 
