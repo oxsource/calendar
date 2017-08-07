@@ -37,6 +37,7 @@ import java.util.Map;
 
 public class CalendarView extends LinearLayout {
     private final CalendarAdapter calendarAdapter = new CalendarAdapter();
+    private final RecyclerView bodyView;
 
     public CalendarView(Context context) {
         this(context, null);
@@ -53,7 +54,7 @@ public class CalendarView extends LinearLayout {
         //初始化星期标头
         initWeekGridView(context);
         //月份列表
-        RecyclerView bodyView = (RecyclerView) findViewById(R.id.bodyView);
+        bodyView = (RecyclerView) findViewById(R.id.bodyView);
         bodyView.setLayoutManager(new LinearLayoutManager(context));
         bodyView.setAdapter(getAdapter());
         initDecoration(bodyView);
@@ -120,5 +121,9 @@ public class CalendarView extends LinearLayout {
 
     public CalendarAdapter getAdapter() {
         return calendarAdapter;
+    }
+
+    public RecyclerView bodyView() {
+        return bodyView;
     }
 }
