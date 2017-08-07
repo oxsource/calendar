@@ -79,27 +79,27 @@ public final class DayView extends LinearLayout {
         switch (status) {
             //正常
             case DayStatus.NORMAL:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.common_text_color));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_normal_color));
                 break;
             //不可用
             case DayStatus.INVALID:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.invalid_text_color));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_invalid_color));
                 break;
             //范围内
             case DayStatus.RANGE:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 break;
             //左边界
             case DayStatus.BOUND_L:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 break;
             //右边界
             case DayStatus.BOUND_R:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 break;
             //强调
             case DayStatus.STRESS:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.stress_text_color));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_stress_color));
                 break;
         }
     }
@@ -113,37 +113,37 @@ public final class DayView extends LinearLayout {
         switch (entity.status()) {
             //正常
             case DayStatus.NORMAL:
-                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_normal_color));
                 setEnabled(true);
                 break;
             //不可用
             case DayStatus.INVALID:
-                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.common_bg_color));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_invalid_color));
                 setTextStatusColor(tvDay, entity.status());
                 setEnabled(false);
                 break;
             //范围内
             case DayStatus.RANGE:
-                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.range_bg_color));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_range_color));
                 setEnabled(true);
                 break;
             //左边界
             case DayStatus.BOUND_L:
-                tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
-                tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
+                tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 tvDesc.setText(entity.note());
-                setBackgroundResource(R.drawable.range_lbg);
+                setBackgroundResource(R.drawable.day_shape_range_lbg);
                 break;
             //右边界
             case DayStatus.BOUND_R:
-                tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
-                tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.select_text_color));
+                tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
+                tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 tvDesc.setText(entity.note());
-                setBackgroundResource(R.drawable.range_rbg);
+                setBackgroundResource(R.drawable.day_shape_range_rbg);
                 break;
             //强调
             case DayStatus.STRESS:
-                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.range_bg_color));
+                setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_range_color));
                 setEnabled(true);
                 break;
         }

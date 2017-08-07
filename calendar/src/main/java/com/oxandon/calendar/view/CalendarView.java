@@ -88,13 +88,13 @@ public class CalendarView extends LinearLayout {
         };
         StickyDecoration decoration = StickyDecoration.Builder
                 .init(groupListener)
-                .setGroupBackground(ContextCompat.getColor(getContext(), R.color.common_bg_color))     //背景色
-                .setGroupHeight(ViewUtils.dp2px(getContext(), 40))     //高度
-                .setDivideColor(ContextCompat.getColor(getContext(), R.color.divide_line_color))           //分割线颜色
-                .setDivideHeight(ViewUtils.dp2px(getContext(), 0.5f))  //分割线高度 (默认没有分割线)
-                .setGroupTextColor(ContextCompat.getColor(getContext(), R.color.common_text_color))                        //字体颜色
+                .setGroupBackground(ContextCompat.getColor(getContext(), R.color.calendar_background_decoration_color))     //背景色
+                .setGroupHeight((int) getResources().getDimension(R.dimen.calendar_decoration_height))     //高度
+                .setDivideColor(ContextCompat.getColor(getContext(), R.color.month_divide_line_color))           //分割线颜色
+                .setDivideHeight((int) getResources().getDimension(R.dimen.calendar_decoration_divide_line_height))  //分割线高度 (默认没有分割线)
+                .setGroupTextColor(ContextCompat.getColor(getContext(), R.color.calendar_text_decoration_color))                        //字体颜色
                 .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD)) //加粗
-                .setGroupTextSize(ViewUtils.sp2px(getContext(), 15))   //字体大小
+                .setGroupTextSize((int) getResources().getDimension(R.dimen.calendar_decoration_text_size))   //字体大小
                 .setTextSideMargin(ViewUtils.dp2px(getContext(), 10))  //边距   靠左时为左边距  靠右时为右边距
                 .setTextAlign(Paint.Align.CENTER)                      //居中显示
                 .build();

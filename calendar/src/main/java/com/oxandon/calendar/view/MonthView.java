@@ -1,8 +1,8 @@
 package com.oxandon.calendar.view;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +14,6 @@ import com.oxandon.calendar.protocol.MonthEntity;
 import com.oxandon.calendar.protocol.NInterval;
 import com.oxandon.calendar.protocol.OnMonthClickListener;
 import com.oxandon.calendar.utils.DateUtils;
-import com.oxandon.calendar.utils.ViewUtils;
 
 import java.util.Date;
 
@@ -49,17 +48,17 @@ public class MonthView extends ViewGroup {
 
     public MonthView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        setBackgroundColor(Color.WHITE);
+        setBackgroundColor(ContextCompat.getColor(context, R.color.month_background_color));
         //DayView
         for (int i = 0; i < dayViews.length; i++) {
             dayViews[i] = new DayView(context);
             addView(dayViews[i]);
         }
         //horizontal line
-        LINE_HEIGHT = ViewUtils.dp2px(context, 0.5f);
+        LINE_HEIGHT = (int) getResources().getDimension(R.dimen.month_divide_line_height);
         for (int j = 0; j < lines.length; j++) {
             View view = new View(getContext());
-            view.setBackgroundResource(R.color.divide_line_color);
+            view.setBackgroundResource(R.color.month_divide_line_color);
             addView(view);
             lines[j] = view;
         }

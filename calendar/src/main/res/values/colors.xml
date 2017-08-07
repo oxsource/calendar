@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="common_text_color">#343434</color>
-    <color name="stress_text_color">#FF6600</color>
-    <color name="select_text_color">#FFFFFF</color>
-    <color name="invalid_text_color">#CCCCCC</color>
+    <!--calendar module-->
+    <color name="calendar_background_color">#FFFFFF</color>
+    <color name="calendar_background_week_color">#FAFAFA</color>
+    <color name="calendar_background_decoration_color">#FFFFFF</color>
+    <color name="calendar_text_decoration_color">#343434</color>
 
-    <color name="common_bg_color">#FFFFFF</color>
-    <color name="invalid_bg_color">#9C9C9C</color>
-    <color name="range_bg_color">#ABEAE2</color>
-    <color name="bound_bg_color">#05C0AB</color>
+    <!--month module-->
+    <color name="month_divide_line_color">#ECECEC</color>
+    <color name="month_background_color">#FFFFFF</color>
 
-    <color name="week_bg_color">#FAFAFA</color>
+    <!--day module-->
+    <color name="day_text_normal_color">#343434</color>
+    <color name="day_text_invalid_color">#CCCCCC</color>
+    <color name="day_text_select_color">#FFFFFF</color>
+    <color name="day_text_stress_color">#FF6600</color>
 
-    <color name="divide_line_color">#ECECEC</color>
+    <color name="day_background_normal_color">#FFFFFF</color>
+    <color name="day_background_invalid_color">#FFFFFF</color>
+    <color name="day_background_range_color">#ABEAE2</color>
+    <color name="day_background_bound_color">#05C0AB</color>
 </resources>

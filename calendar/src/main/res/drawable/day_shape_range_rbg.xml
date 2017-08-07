@@ -5,5 +5,5 @@
         android:bottomRightRadius="5dp"
         android:topLeftRadius="0dp"
         android:topRightRadius="5dp"/>
-    <solid android:color="@color/bound_bg_color"/>
+    <solid android:color="@color/day_background_bound_color"/>
 </shape>
