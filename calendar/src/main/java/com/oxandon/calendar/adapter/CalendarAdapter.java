@@ -16,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
+ * 日历适配器
  * Created by peng on 2017/8/3.
  */
 
@@ -119,6 +120,25 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     @Override
     public int getItemCount() {
         return dates.size();
+    }
+
+    public int getTargetDatePosition(Date date) {
+        int position = 0;
+        if (dates.size() > 1) {
+            if (date.getTime() <= dates.get(0).getTime()) {
+                position = 0;
+            } else if (date.getTime() >= dates.get(dates.size() - 1).getTime()) {
+                position = dates.size() - 1;
+            } else {
+                for (int i = 0; i < dates.size() - 1; i++) {
+                    if (date.getTime() > dates.get(i).getTime() && date.getTime() > dates.get(i + 1).getTime()) {
+                        position = i;
+                        break;
+                    }
+                }
+            }
+        }
+        return position;
     }
 
     public Date value(int position) {
