@@ -131,7 +131,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
                 position = dates.size() - 1;
             } else {
                 for (int i = 0; i < dates.size() - 1; i++) {
-                    if (date.getTime() > dates.get(i).getTime() && date.getTime() > dates.get(i + 1).getTime()) {
+                    if (date.getTime() >= dates.get(i).getTime() && date.getTime() <= dates.get(i + 1).getTime()) {
                         position = i;
                         break;
                     }
