@@ -81,14 +81,14 @@ public class CalendarPopWindow extends PopupWindow implements OnCalendarSelectLi
     }
 
     @Override
-    public void onCalendarSingleSelect(@NonNull Date date) {
+    public void onSingleSelect(@NonNull Date date) {
         mLlBtn.setVisibility(View.GONE);
         beforeDate = null;
         afterDate = null;
     }
 
     @Override
-    public void onCalendarBothSelect(@NonNull Date before, @NonNull Date after) {
+    public void onDoubleSelect(@NonNull Date before, @NonNull Date after) {
         mLlBtn.setVisibility(View.VISIBLE);
         beforeDate = before;
         afterDate = after;

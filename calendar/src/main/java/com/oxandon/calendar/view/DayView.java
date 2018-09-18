@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.oxandon.calendar.R;
-import com.oxandon.calendar.annotation.DayStatus;
+import com.oxandon.calendar.annotation.Status;
 import com.oxandon.calendar.protocol.DayEntity;
 
 /**
@@ -40,14 +40,14 @@ public final class DayView extends LinearLayout {
     /**
      * 初始化
      *
-     * @param context
+     * @param context 上下文
      */
     private void initialize(Context context) {
         setOrientation(VERTICAL);
         inflate(context, R.layout.layout_day_view, this);
         setBackgroundColor(Color.WHITE);
-        tvDesc = (TextView) findViewById(R.id.tvDesc);
-        tvDay = (TextView) findViewById(R.id.tvDay);
+        tvDesc = findViewById(R.id.tvDesc);
+        tvDay = findViewById(R.id.tvDay);
     }
 
     public void value(DayEntity entity) {
@@ -72,33 +72,33 @@ public final class DayView extends LinearLayout {
     /**
      * 设置文本状态颜色
      *
-     * @param tv
-     * @param status
+     * @param tv     文本控件
+     * @param status 状态
      */
-    private void setTextStatusColor(TextView tv, @DayStatus int status) {
+    private void setTextStatusColor(TextView tv, @Status int status) {
         switch (status) {
             //正常
-            case DayStatus.NORMAL:
+            case Status.NORMAL:
                 tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_normal_color));
                 break;
             //不可用
-            case DayStatus.INVALID:
+            case Status.INVALID:
                 tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_invalid_color));
                 break;
             //范围内
-            case DayStatus.RANGE:
+            case Status.RANGE:
                 tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 break;
             //左边界
-            case DayStatus.BOUND_L:
+            case Status.BOUND_L:
                 tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 break;
             //右边界
-            case DayStatus.BOUND_R:
+            case Status.BOUND_R:
                 tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 break;
             //强调
-            case DayStatus.STRESS:
+            case Status.STRESS:
                 tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_stress_color));
                 break;
         }
@@ -107,42 +107,42 @@ public final class DayView extends LinearLayout {
     /**
      * 设置背景状态
      *
-     * @param entity
+     * @param entity 实体
      */
     private void setBackgroundStatus(DayEntity entity) {
         switch (entity.status()) {
             //正常
-            case DayStatus.NORMAL:
+            case Status.NORMAL:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_normal_color));
                 setEnabled(true);
                 break;
             //不可用
-            case DayStatus.INVALID:
+            case Status.INVALID:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_invalid_color));
                 setTextStatusColor(tvDay, entity.status());
                 setEnabled(false);
                 break;
             //范围内
-            case DayStatus.RANGE:
+            case Status.RANGE:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_range_color));
                 setEnabled(true);
                 break;
             //左边界
-            case DayStatus.BOUND_L:
+            case Status.BOUND_L:
                 tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 tvDesc.setText(entity.note());
                 setBackgroundResource(R.drawable.day_shape_range_lbg);
                 break;
             //右边界
-            case DayStatus.BOUND_R:
+            case Status.BOUND_R:
                 tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 tvDesc.setText(entity.note());
                 setBackgroundResource(R.drawable.day_shape_range_rbg);
                 break;
             //强调
-            case DayStatus.STRESS:
+            case Status.STRESS:
                 setBackgroundColor(ContextCompat.getColor(getContext(), R.color.day_background_range_color));
                 setEnabled(true);
                 break;

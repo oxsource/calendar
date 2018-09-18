@@ -15,9 +15,8 @@ public class Interval<T> {
         return lBound;
     }
 
-    public Interval lBound(int lBound) {
+    public void lBound(int lBound) {
         this.lBound = lBound;
-        return this;
     }
 
     public T left() {
@@ -33,9 +32,8 @@ public class Interval<T> {
         return rBound;
     }
 
-    public Interval rBound(int rBound) {
+    public void rBound(int rBound) {
         this.rBound = rBound;
-        return this;
     }
 
     public T right() {

@@ -1,6 +1,6 @@
 package com.oxandon.calendar.protocol;
 
-import com.oxandon.calendar.annotation.DayStatus;
+import com.oxandon.calendar.annotation.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,25 +12,25 @@ import java.util.List;
  */
 
 public class DayEntity {
-    @DayStatus
+    @Status
     private int status;
     private int value;
-    @DayStatus
+    @Status
     private int valueStatus;
     private String desc;
-    @DayStatus
+    @Status
     private int descStatus;
     private String note;
 
     private DayEntity() {
     }
 
-    @DayStatus
+    @Status
     public int status() {
         return status;
     }
 
-    public DayEntity status(@DayStatus int status) {
+    public DayEntity status(@Status int status) {
         this.status = status;
         return this;
     }
@@ -48,12 +48,12 @@ public class DayEntity {
         return value;
     }
 
-    @DayStatus
+    @Status
     public int valueStatus() {
         return valueStatus;
     }
 
-    public DayEntity valueStatus(@DayStatus int valueStatus) {
+    public DayEntity valueStatus(@Status int valueStatus) {
         this.valueStatus = valueStatus;
         return this;
     }
@@ -68,12 +68,12 @@ public class DayEntity {
         return this;
     }
 
-    @DayStatus
+    @Status
     public int descStatus() {
         return descStatus;
     }
 
-    public DayEntity descStatus(@DayStatus int descStatus) {
+    public DayEntity descStatus(@Status int descStatus) {
         this.descStatus = descStatus;
         return this;
     }
@@ -89,10 +89,10 @@ public class DayEntity {
 
     public void recycle() {
         if (!pools.contains(this)) {
-            this.status = DayStatus.NORMAL;
+            this.status = Status.NORMAL;
             this.value = -1;
-            this.valueStatus = DayStatus.NORMAL;
-            this.descStatus = DayStatus.NORMAL;
+            this.valueStatus = Status.NORMAL;
+            this.descStatus = Status.NORMAL;
             this.desc = "";
             pools.add(this);
         }
@@ -100,7 +100,7 @@ public class DayEntity {
 
     private static final List<DayEntity> pools = new ArrayList<>();
 
-    public static DayEntity obtain(@DayStatus int status, int value, String desc) {
+    public static DayEntity obtain(@Status int status, int value, String desc) {
         DayEntity entity = 0 == pools.size() ? new DayEntity() : pools.remove(0);
         entity.status = status;
         entity.value = value;

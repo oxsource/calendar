@@ -6,12 +6,11 @@ import android.graphics.Rect;
 import android.support.annotation.ColorInt;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
 /**
  * ItemDecoration基础实现
- * Created by wangcheng on 2017/8/3.
+ * Created by peng on 2017/8/3.
  */
 public abstract class BaseDecoration extends RecyclerView.ItemDecoration {
 
@@ -25,7 +24,7 @@ public abstract class BaseDecoration extends RecyclerView.ItemDecoration {
 
     Paint mDividePaint;
 
-    public BaseDecoration() {
+    BaseDecoration() {
         mDividePaint = new Paint();
         mDividePaint.setColor(mDivideColor);
     }

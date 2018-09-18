@@ -13,7 +13,7 @@ import android.view.View;
 /**
  * RecyleView文字悬浮
  * 使用分割线实现
- * Created by wangcheng on 2017/8/3.
+ * Created by peng on 2017/8/3.
  */
 
 public class StickyDecoration extends BaseDecoration {

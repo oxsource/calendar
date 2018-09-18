@@ -12,7 +12,7 @@ import com.oxandon.calendar.view.MonthView;
 public class CalendarViewHolder extends RecyclerView.ViewHolder {
     private final MonthView view;
 
-    public CalendarViewHolder(View itemView) {
+    CalendarViewHolder(View itemView) {
         super(itemView);
         view = (MonthView) itemView;
     }

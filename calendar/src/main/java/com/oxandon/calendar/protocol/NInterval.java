@@ -8,9 +8,9 @@ package com.oxandon.calendar.protocol;
 public class NInterval extends Interval<Integer> {
 
     public NInterval() {
-        left(Integer.valueOf(-1));
+        left(-1);
         lBound(-1);
-        right(Integer.valueOf(-1));
+        right(-1);
         rBound(-1);
     }
 

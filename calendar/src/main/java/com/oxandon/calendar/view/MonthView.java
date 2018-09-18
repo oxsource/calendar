@@ -8,7 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.oxandon.calendar.R;
-import com.oxandon.calendar.annotation.DayStatus;
+import com.oxandon.calendar.annotation.Status;
 import com.oxandon.calendar.protocol.DayEntity;
 import com.oxandon.calendar.protocol.MonthEntity;
 import com.oxandon.calendar.protocol.NInterval;
@@ -26,6 +26,7 @@ public class MonthView extends ViewGroup {
     private final DayView[] dayViews = new DayView[MonthEntity.MAX_DAYS_OF_MONTH];
     private final View[] lines = new View[MonthEntity.MAX_HORIZONTAL_LINES];
     private final int LINE_HEIGHT;
+    private final SplitLinesLayoutControl lineControl;
 
     private MonthEntity monthEntity;
     private int isTodayOfMonth = -1;
@@ -35,8 +36,6 @@ public class MonthView extends ViewGroup {
     //child width and height
     private int childWidth = 0;
     private int childHeight = 0;
-    //row count
-    private int dayRows = 0;
 
     public MonthView(Context context) {
         this(context, null);
@@ -62,6 +61,7 @@ public class MonthView extends ViewGroup {
             addView(view);
             lines[j] = view;
         }
+        lineControl = new SplitLinesLayoutControl(lines);
     }
 
     @Override
@@ -74,7 +74,7 @@ public class MonthView extends ViewGroup {
         int childrenHeight = 0;
         //calc need rows
         int amount = position + offset;
-        dayRows = (amount / MonthEntity.WEEK_DAYS) + (((amount % MonthEntity.WEEK_DAYS) != 0) ? 1 : 0);
+        int dayRows = (amount / MonthEntity.WEEK_DAYS) + (((amount % MonthEntity.WEEK_DAYS) != 0) ? 1 : 0);
         //measure container
         childrenHeight += dayViews[0].getMeasuredHeight() * dayRows;
         childrenHeight += (dayRows) * LINE_HEIGHT;
@@ -84,12 +84,12 @@ public class MonthView extends ViewGroup {
         childHeight = dayViews[0].getMeasuredHeight();
         int childWidthSpec = MeasureSpec.makeMeasureSpec(childWidth, MeasureSpec.EXACTLY);
         int childHeightSpec = MeasureSpec.makeMeasureSpec(childHeight, MeasureSpec.EXACTLY);
-        for (int i = 0; i < dayViews.length; i++) {
-            dayViews[i].measure(childWidthSpec, childHeightSpec);
+        for (DayView dayView : dayViews) {
+            dayView.measure(childWidthSpec, childHeightSpec);
         }
         //measure horizontal lines
-        for (int i = 0; i < lines.length; i++) {
-            lines[i].measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(LINE_HEIGHT, MeasureSpec.EXACTLY));
+        for (View line : lines) {
+            line.measure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(LINE_HEIGHT, MeasureSpec.EXACTLY));
         }
     }
 
@@ -100,7 +100,7 @@ public class MonthView extends ViewGroup {
         private int count = 0;
         private View[] view;
 
-        public SplitLinesLayoutControl(@NonNull View[] views) {
+        SplitLinesLayoutControl(@NonNull View[] views) {
             this.view = views;
             width = views[0].getMeasuredWidth();
             height = views[0].getMeasuredHeight();
@@ -123,7 +123,6 @@ public class MonthView extends ViewGroup {
             return;
         }
         int offsetX = 0, offsetY = 0;
-        SplitLinesLayoutControl lineControl = new SplitLinesLayoutControl(lines);
         for (int i = 0; i < position; i++) {
             offsetX += childWidth;
         }
@@ -141,27 +140,30 @@ public class MonthView extends ViewGroup {
             if (index < offset) {
                 //set state
                 boolean isToday = index == isTodayOfMonth;
-                dayEntity = DayEntity.obtain(DayStatus.NORMAL, index, isToday ? MonthEntity.STR_TODAY : "")
-                        .valueStatus((lastIsRightBound || rightBound) ? DayStatus.STRESS : DayStatus.NORMAL)
-                        .descStatus(isToday ? DayStatus.STRESS : DayStatus.NORMAL);
+                dayEntity = DayEntity.obtain(Status.NORMAL, index, isToday ? MonthEntity.STR_TODAY : "")
+                        .valueStatus((lastIsRightBound || rightBound) ? Status.STRESS : Status.NORMAL)
+                        .descStatus(isToday ? Status.STRESS : Status.NORMAL);
                 //valid
                 if (validRange.contain(index)) {
                     if (null != selectRange && selectRange.contain(index)) {
                         if (index == selectRange.lBound()) {
-                            dayEntity.status(DayStatus.BOUND_L).note(monthEntity.selectNote().left());
+                            dayEntity.status(Status.BOUND_L).note(monthEntity.selectNote().left());
                         } else if (index == selectRange.rBound()) {
-                            dayEntity.status(DayStatus.BOUND_R).note(monthEntity.selectNote().right());
+                            dayEntity.status(Status.BOUND_R).note(monthEntity.selectNote().right());
                         } else {
-                            dayEntity.status(DayStatus.RANGE);
+                            dayEntity.status(Status.RANGE);
+                            if (dayEntity.valueStatus() == Status.NORMAL) {
+                                dayEntity.valueStatus(Status.RANGE);
+                            }
                         }
                     }
                 } else {
                     //不响应选择事件
-                    dayEntity.status(DayStatus.INVALID).valueStatus(DayStatus.INVALID).descStatus(DayStatus.INVALID);
+                    dayEntity.status(Status.INVALID).valueStatus(Status.INVALID).descStatus(Status.INVALID);
                 }
                 dayViews[index].setOnClickListener(clickDayListener);
             } else {
-                dayEntity = DayEntity.obtain(DayStatus.INVALID, -1, "");
+                dayEntity = DayEntity.obtain(Status.INVALID, -1, "");
                 dayViews[index].setOnClickListener(null);
             }
             dayViews[index].value(dayEntity);

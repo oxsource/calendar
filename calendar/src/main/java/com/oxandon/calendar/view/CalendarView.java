@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -54,7 +55,7 @@ public class CalendarView extends LinearLayout {
         //初始化星期标头
         initWeekGridView(context);
         //月份列表
-        bodyView = (RecyclerView) findViewById(R.id.bodyView);
+        bodyView = findViewById(R.id.bodyView);
         bodyView.setLayoutManager(new LinearLayoutManager(context));
         bodyView.setAdapter(getAdapter());
         initDecoration(bodyView);
@@ -67,13 +68,13 @@ public class CalendarView extends LinearLayout {
                 "日", "一", "二", "三", "四", "五", "六"
         };
         List<Map<String, String>> weeks = new ArrayList<>();
-        for (int i = 0; i < strings.length; i++) {
+        for (String string : strings) {
             Map<String, String> map = new HashMap<>();
-            map.put(from[0], strings[i]);
+            map.put(from[0], string);
             weeks.add(map);
         }
         ListAdapter adapter = new SimpleAdapter(context, weeks, R.layout.layout_week_view, from, to);
-        GridView weekView = (GridView) findViewById(R.id.weekView);
+        GridView weekView = findViewById(R.id.weekView);
         weekView.setNumColumns(adapter.getCount());
         weekView.setAdapter(adapter);
         weekView.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -89,11 +90,14 @@ public class CalendarView extends LinearLayout {
         };
         StickyDecoration decoration = StickyDecoration.Builder
                 .init(groupListener)
-                .setGroupBackground(ContextCompat.getColor(getContext(), R.color.calendar_background_decoration_color))     //背景色
+                .setGroupBackground(ContextCompat.getColor(getContext(), R.color
+                        .calendar_background_decoration_color))     //背景色
                 .setGroupHeight((int) getResources().getDimension(R.dimen.calendar_decoration_height))     //高度
                 .setDivideColor(ContextCompat.getColor(getContext(), R.color.month_divide_line_color))           //分割线颜色
-                .setDivideHeight((int) getResources().getDimension(R.dimen.calendar_decoration_divide_line_height))  //分割线高度 (默认没有分割线)
-                .setGroupTextColor(ContextCompat.getColor(getContext(), R.color.calendar_text_decoration_color))                        //字体颜色
+                .setDivideHeight((int) getResources().getDimension(R.dimen.calendar_decoration_divide_line_height))
+                //分割线高度 (默认没有分割线)
+                .setGroupTextColor(ContextCompat.getColor(getContext(), R.color.calendar_text_decoration_color))
+                //字体颜色
                 .setTypeface(Typeface.defaultFromStyle(Typeface.BOLD)) //加粗
                 .setGroupTextSize((int) getResources().getDimension(R.dimen.calendar_decoration_text_size))   //字体大小
                 .setTextSideMargin(ViewUtils.dp2px(getContext(), 10))  //边距   靠左时为左边距  靠右时为右边距
@@ -110,7 +114,7 @@ public class CalendarView extends LinearLayout {
     public void show(String sTime, String eTime, String format) {
         Date[] dates = new Date[2];
         try {
-            SimpleDateFormat sdf = new SimpleDateFormat(format);
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.SIMPLIFIED_CHINESE);
             dates[0] = sdf.parse(sTime);
             dates[1] = sdf.parse(eTime);
         } catch (Exception e) {

@@ -10,7 +10,7 @@ import java.util.Date;
  */
 
 public interface OnCalendarSelectListener {
-    void onCalendarSingleSelect(@NonNull Date date);
+    void onSingleSelect(@NonNull Date date);
 
-    void onCalendarBothSelect(@NonNull Date before, @NonNull Date after);
+    void onDoubleSelect(@NonNull Date before, @NonNull Date after);
 }

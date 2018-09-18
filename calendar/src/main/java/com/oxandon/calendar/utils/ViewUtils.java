@@ -24,7 +24,9 @@ public class ViewUtils {
     public static DisplayMetrics getDisplayMetrics(Context context) {
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         DisplayMetrics metrics = new DisplayMetrics();
-        wm.getDefaultDisplay().getMetrics(metrics);
+        if (wm != null) {
+            wm.getDefaultDisplay().getMetrics(metrics);
+        }
         return metrics;
     }
 

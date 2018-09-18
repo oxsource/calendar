@@ -1,5 +1,6 @@
 package com.oxandon.calendar.adapter;
 
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
@@ -58,18 +59,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     /**
      * 选择区间提示语
      *
-     * @param noteFrom
-     * @param noteTo
+     * @param noteFrom 开始日期提示语
+     * @param noteTo   结束日期提示语
      */
     public void intervalNotes(String noteFrom, String noteTo) {
-        selectNote.left(noteFrom).right(noteTo);
+        selectNote.left(noteFrom);
+        selectNote.right(noteTo);
     }
 
     /**
      * 设置选择范围
      *
-     * @param fromDay
-     * @param toDay
+     * @param fromDay 开始时间
+     * @param toDay   结束时间
      */
     public void select(String fromDay, String toDay) {
         try {
@@ -85,16 +87,18 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     /**
      * 设置选择范围
      *
-     * @param from
-     * @param to
+     * @param from 开始日期
+     * @param to   结束日期
      */
     public void select(Date from, Date to) {
-        select.left(from).right(to);
+        select.left(from);
+        select.right(to);
         notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public CalendarViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         MonthView view = new MonthView(parent.getContext());
         int width = ViewGroup.LayoutParams.MATCH_PARENT;
         int height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -105,7 +109,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     }
 
     @Override
-    public void onBindViewHolder(CalendarViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         MonthEntity entity = MonthEntity.obtain(valid, select)
                 .date(dates.get(position))
                 .selectNote(selectNote);
@@ -113,7 +117,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     }
 
     @Override
-    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+    public void onDetachedFromRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
     }
 
@@ -122,7 +126,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
         return dates.size();
     }
 
-    public int getTargetDatePosition(Date date) {
+    public int getDatePosition(Date date) {
         int position = 0;
         if (dates.size() > 1) {
             if (date.getTime() <= dates.get(0).getTime()) {
@@ -168,16 +172,16 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
         if (null == lastClickDate) {
             lastClickDate = date;
             select(date, date);
-            calendarSelectListener.onCalendarSingleSelect(date);
+            calendarSelectListener.onSingleSelect(date);
             return;
         }
         if (lastClickDate.getTime() >= date.getTime()) {
             lastClickDate = date;
             select(date, date);
-            calendarSelectListener.onCalendarSingleSelect(date);
+            calendarSelectListener.onSingleSelect(date);
         } else {
             select(lastClickDate, date);
-            calendarSelectListener.onCalendarBothSelect(lastClickDate, date);
+            calendarSelectListener.onDoubleSelect(lastClickDate, date);
             Log.d(TAG, "onDayInMonthClick:" + lastClickDate.getTime() + "," + date.getTime());
             lastClickDate = null;
         }

@@ -22,20 +22,16 @@ public class DateUtils {
     }
 
     /**
-     * 当月最大天数
-     *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 当月最大天数
      */
     public static int maxDaysOfMonth(Date date) {
         return calendar(date).getActualMaximum(Calendar.DATE);
     }
 
     /**
-     * 当月第一天在月份表中的索引
-     *
-     * @param date
-     * @return
+     * @param date 日期
+     * @return 当月第一天在月份表中的索引
      */
     public static int firstDayOfMonthIndex(Date date) {
         Calendar calendar = calendar(date);
@@ -46,45 +42,43 @@ public class DateUtils {
     /**
      * 给定日期是否是今天所在的月份
      *
-     * @param date
+     * @param date 日期
      * @return 今天是当月几号
      */
     public static int isTodayOfMonth(Date date) {
         Calendar current = calendar(new Date());
         Calendar calendar = calendar(date);
-        if (!equals(current, calendar, Calendar.YEAR)) {
+        if (diverse(current, calendar, Calendar.YEAR)) {
             return -1;
         }
-        if (!equals(current, calendar, Calendar.MONTH)) {
+        if (diverse(current, calendar, Calendar.MONTH)) {
             return -1;
         }
         return current.get(Calendar.DAY_OF_MONTH) - 1;
     }
 
     /**
-     * 比较是否相同
-     *
-     * @param calendarA
-     * @param calendarB
-     * @param field
-     * @return
+     * @param calendarA 开始日历
+     * @param calendarB 结束日历
+     * @param field     字段
+     * @return 是否相同：不相--true,相同--false
      */
-    public static boolean equals(Calendar calendarA, Calendar calendarB, int field) {
+    public static boolean diverse(Calendar calendarA, Calendar calendarB, int field) {
         boolean same;
         try {
             same = calendarA.get(field) == calendarB.get(field);
         } catch (Exception e) {
             same = false;
         }
-        return same;
+        return !same;
     }
 
     /**
      * 区间内有多少个月
      *
-     * @param sDate
-     * @param eDate
-     * @return
+     * @param sDate 开始日期
+     * @param eDate 结束日期
+     * @return 月数
      */
     public static int months(Date sDate, Date eDate) {
         Calendar before = calendar(min(sDate, eDate));
@@ -105,9 +99,9 @@ public class DateUtils {
     /**
      * 获取区间内各月的Date
      *
-     * @param sDate
-     * @param eDate
-     * @return
+     * @param sDate 开始日期
+     * @param eDate 结束日期
+     * @return 区间内各月的Date
      */
     public static List<Date> fillMonths(Date sDate, Date eDate) {
         List<Date> dates = new ArrayList<>();
@@ -206,11 +200,9 @@ public class DateUtils {
     }
 
     /**
-     * 根据月份及日期索引计算出指定日期
-     *
-     * @param month
-     * @param index
-     * @return
+     * @param month 月份
+     * @param index 索引
+     * @return 根据月份及日期索引计算出指定日期
      */
     public static Date specialDayInMonth(Date month, int index) {
         Calendar calendar = calendar(month);
