@@ -17,18 +17,15 @@ import android.widget.SimpleAdapter;
 
 import com.oxandon.calendar.R;
 import com.oxandon.calendar.adapter.CalendarAdapter;
-import com.oxandon.calendar.utils.DateUtils;
 import com.oxandon.calendar.utils.TimeUtil;
 import com.oxandon.calendar.utils.ViewUtils;
 import com.oxandon.calendar.view.decoration.GroupListener;
 import com.oxandon.calendar.view.decoration.StickyDecoration;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 /**
@@ -39,6 +36,7 @@ import java.util.Map;
 public class CalendarView extends LinearLayout {
     private final CalendarAdapter calendarAdapter = new CalendarAdapter();
     private final RecyclerView bodyView;
+    private final LinearLayoutManager mLayoutManager;
 
     public CalendarView(Context context) {
         this(context, null);
@@ -56,7 +54,8 @@ public class CalendarView extends LinearLayout {
         initWeekGridView(context);
         //月份列表
         bodyView = findViewById(R.id.bodyView);
-        bodyView.setLayoutManager(new LinearLayoutManager(context));
+        mLayoutManager = new LinearLayoutManager(context);
+        bodyView.setLayoutManager(mLayoutManager);
         bodyView.setAdapter(getAdapter());
         initDecoration(bodyView);
     }
@@ -78,6 +77,10 @@ public class CalendarView extends LinearLayout {
         weekView.setNumColumns(adapter.getCount());
         weekView.setAdapter(adapter);
         weekView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+    }
+
+    public LinearLayoutManager getLayoutManager() {
+        return mLayoutManager;
     }
 
     public void initDecoration(RecyclerView bodyView) {
@@ -104,23 +107,6 @@ public class CalendarView extends LinearLayout {
                 .setTextAlign(Paint.Align.CENTER)                      //居中显示
                 .build();
         bodyView.addItemDecoration(decoration);
-    }
-
-    public void show(Date sDate, Date eDate) {
-        List<Date> dates = DateUtils.fillMonths(sDate, eDate);
-        getAdapter().update(dates);
-    }
-
-    public void show(String sTime, String eTime, String format) {
-        Date[] dates = new Date[2];
-        try {
-            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.SIMPLIFIED_CHINESE);
-            dates[0] = sdf.parse(sTime);
-            dates[1] = sdf.parse(eTime);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        show(dates[0], dates[1]);
     }
 
     public CalendarAdapter getAdapter() {

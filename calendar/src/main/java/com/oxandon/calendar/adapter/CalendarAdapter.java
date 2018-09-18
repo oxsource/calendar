@@ -9,12 +9,15 @@ import com.oxandon.calendar.protocol.Interval;
 import com.oxandon.calendar.protocol.MonthEntity;
 import com.oxandon.calendar.protocol.OnCalendarSelectListener;
 import com.oxandon.calendar.protocol.OnMonthClickListener;
+import com.oxandon.calendar.utils.DateUtils;
 import com.oxandon.calendar.utils.TimeUtil;
 import com.oxandon.calendar.view.MonthView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 日历适配器
@@ -29,6 +32,23 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     private Interval<String> selectNote = new Interval<>();
 
     public CalendarAdapter() {
+    }
+
+    public void update(Date sDate, Date eDate) {
+        List<Date> dates = DateUtils.fillMonths(sDate, eDate);
+        update(dates);
+    }
+
+    public void update(String sTime, String eTime, String format) {
+        Date[] dates = new Date[2];
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.SIMPLIFIED_CHINESE);
+            dates[0] = sdf.parse(sTime);
+            dates[1] = sdf.parse(eTime);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        update(dates[0], dates[1]);
     }
 
     public void update(List<Date> list) {
@@ -81,6 +101,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
         } catch (Exception e) {
             select.left(null);
             select.right(null);
+            notifyDataSetChanged();
         }
     }
 
