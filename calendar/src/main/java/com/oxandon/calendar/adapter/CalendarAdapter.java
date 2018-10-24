@@ -30,16 +30,24 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     private Interval<Date> valid = new Interval<>();
     private Interval<Date> select = new Interval<>();
     private Interval<String> selectNote = new Interval<>();
+    //单选标记
+    private boolean singleFlag = false;
 
     public CalendarAdapter() {
     }
 
-    public void update(Date sDate, Date eDate) {
+    /**
+     * 设置选择日期范围
+     *
+     * @param sDate
+     * @param eDate
+     */
+    public void setRange(Date sDate, Date eDate) {
         List<Date> dates = DateUtils.fillMonths(sDate, eDate);
-        update(dates);
+        setRange(dates);
     }
 
-    public void update(String sTime, String eTime, String format) {
+    public void setRange(String sTime, String eTime, String format) {
         Date[] dates = new Date[2];
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.SIMPLIFIED_CHINESE);
@@ -48,16 +56,21 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
         } catch (Exception e) {
             e.printStackTrace();
         }
-        update(dates[0], dates[1]);
+        setRange(dates[0], dates[1]);
     }
 
-    public void update(List<Date> list) {
+    public void setRange(List<Date> list) {
         if (null != list && list.size() > 0) {
             dates.addAll(list);
         } else {
             dates.clear();
         }
         notifyDataSetChanged();
+    }
+
+    //是否选择单个日期
+    public void single(boolean value) {
+        singleFlag = value;
     }
 
     public void valid(String fromDay, String toDay) {
@@ -133,6 +146,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         MonthEntity entity = MonthEntity.obtain(valid, select)
                 .date(dates.get(position))
+                .singleFlag(singleFlag)
                 .selectNote(selectNote);
         holder.view().value(entity);
     }
@@ -148,7 +162,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     }
 
     public int getDatePosition(Date date) {
-        int position = 0;
+        int position = -1;
         if (dates.size() > 1) {
             if (date.getTime() <= dates.get(0).getTime()) {
                 position = 0;
@@ -190,7 +204,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
             Log.d(TAG, "onDayInMonthClick error,receive null date");
             return;
         }
-        if (null == lastClickDate) {
+        if (null == lastClickDate || singleFlag) {
             lastClickDate = date;
             select(date, date);
             calendarSelectListener.onSingleSelect(date);

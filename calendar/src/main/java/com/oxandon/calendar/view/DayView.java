@@ -87,13 +87,11 @@ public final class DayView extends LinearLayout {
                 break;
             //范围内
             case Status.RANGE:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
+                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_range_color));
                 break;
             //左边界
             case Status.BOUND_L:
-                tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
-                break;
-            //右边界
+            case Status.BOUND_M:
             case Status.BOUND_R:
                 tv.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 break;
@@ -133,6 +131,13 @@ public final class DayView extends LinearLayout {
                 tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
                 tvDesc.setText(entity.note());
                 setBackgroundResource(R.drawable.day_shape_range_lbg);
+                break;
+            //单选
+            case Status.BOUND_M:
+                tvDay.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
+                tvDesc.setTextColor(ContextCompat.getColor(getContext(), R.color.day_text_select_color));
+                tvDesc.setText(entity.note());
+                setBackgroundResource(R.drawable.day_shape_range_mbg);
                 break;
             //右边界
             case Status.BOUND_R:

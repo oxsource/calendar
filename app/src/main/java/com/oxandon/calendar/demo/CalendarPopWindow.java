@@ -59,7 +59,8 @@ public class CalendarPopWindow extends PopupWindow implements OnCalendarSelectLi
         mCalendarView.getAdapter().valid(null, TimeUtil.dateText(currentDate.getTime(), TimeUtil.YY_MD));
         mCalendarView.getAdapter().setOnCalendarSelectListener(this);
         mCalendarView.getAdapter().intervalNotes("开始", "结束");
-        mCalendarView.show(startDate, endDate);
+        mCalendarView.getAdapter().setRange(startDate, endDate);
+        mCalendarView.getAdapter().single(true);
         DisplayMetrics metrics = ViewUtils.getDisplayMetrics(context);
         setWidth(metrics.widthPixels);
         setHeight(metrics.heightPixels - ViewUtils.getStateBarHeight(context));

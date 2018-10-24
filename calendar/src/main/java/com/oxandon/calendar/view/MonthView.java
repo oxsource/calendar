@@ -147,7 +147,11 @@ public class MonthView extends ViewGroup {
                 if (validRange.contain(index)) {
                     if (null != selectRange && selectRange.contain(index)) {
                         if (index == selectRange.lBound()) {
-                            dayEntity.status(Status.BOUND_L).note(monthEntity.selectNote().left());
+                            if (monthEntity.singleFlag()) {
+                                dayEntity.status(Status.BOUND_M).note(monthEntity.selectNote().left());
+                            } else {
+                                dayEntity.status(Status.BOUND_L).note(monthEntity.selectNote().left());
+                            }
                         } else if (index == selectRange.rBound()) {
                             dayEntity.status(Status.BOUND_R).note(monthEntity.selectNote().right());
                         } else {

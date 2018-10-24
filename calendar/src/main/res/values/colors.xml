@@ -14,6 +14,7 @@
     <color name="day_text_normal_color">#343434</color>
     <color name="day_text_invalid_color">#CCCCCC</color>
     <color name="day_text_select_color">#FFFFFF</color>
+    <color name="day_text_range_color">#FFFFFF</color>
     <color name="day_text_stress_color">#FF6600</color>
 
     <color name="day_background_normal_color">#FFFFFF</color>

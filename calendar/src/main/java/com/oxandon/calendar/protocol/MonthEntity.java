@@ -18,6 +18,7 @@ public class MonthEntity {
     private Interval<Date> valid;
     private Interval<Date> select;
     private Interval<String> selectNote;
+    private boolean singleFlag = false;
 
     private MonthEntity() {
     }
@@ -47,6 +48,15 @@ public class MonthEntity {
     public MonthEntity select(Interval<Date> select) {
         this.select = select;
         return this;
+    }
+
+    public MonthEntity singleFlag(boolean single) {
+        this.singleFlag = single;
+        return this;
+    }
+
+    public boolean singleFlag() {
+        return this.singleFlag;
     }
 
     public Interval<String> selectNote() {
