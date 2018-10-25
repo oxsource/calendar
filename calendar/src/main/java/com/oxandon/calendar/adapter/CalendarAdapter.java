@@ -42,12 +42,12 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
      * @param sDate
      * @param eDate
      */
-    public void setRange(Date sDate, Date eDate) {
+    public void setRange(Date sDate, Date eDate, boolean clean, boolean notify) {
         List<Date> dates = DateUtils.fillMonths(sDate, eDate);
-        setRange(dates);
+        setRange(dates, clean, notify);
     }
 
-    public void setRange(String sTime, String eTime, String format) {
+    public void setRange(String sTime, String eTime, String format, boolean clean, boolean notify) {
         Date[] dates = new Date[2];
         try {
             SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.SIMPLIFIED_CHINESE);
@@ -56,16 +56,19 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
         } catch (Exception e) {
             e.printStackTrace();
         }
-        setRange(dates[0], dates[1]);
+        setRange(dates[0], dates[1], clean, notify);
     }
 
-    public void setRange(List<Date> list) {
-        if (null != list && list.size() > 0) {
-            dates.addAll(list);
-        } else {
+    public void setRange(List<Date> list, boolean clean, boolean notify) {
+        if (clean) {
             dates.clear();
         }
-        notifyDataSetChanged();
+        if (null != list && list.size() > 0) {
+            dates.addAll(list);
+        }
+        if (notify) {
+            notifyDataSetChanged();
+        }
     }
 
     //是否选择单个日期
