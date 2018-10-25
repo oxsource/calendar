@@ -39,8 +39,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarViewHolder> im
     /**
      * 设置选择日期范围
      *
-     * @param sDate
-     * @param eDate
+     * @param sDate 开始时间
+     * @param eDate 结束时间
      */
     public void setRange(Date sDate, Date eDate, boolean clean, boolean notify) {
         List<Date> dates = DateUtils.fillMonths(sDate, eDate);
